@@ -28,7 +28,8 @@
 
 using namespace Sqrat;
 
-class Employee {
+class Employee
+{
 public:
     Employee() : supervisor(NULL) {}
 
@@ -68,7 +69,8 @@ public:
 
 string Employee::sharedData;
 
-TEST_F(SqratTest, ClassInstances) {
+TEST_F(SqratTest, ClassInstances)
+{
     DefaultVM::Set(vm);
 
     Class<Employee> employee;
@@ -100,7 +102,7 @@ TEST_F(SqratTest, ClassInstances) {
     bob.gender = _SC("Male");
     bob.middleName = _SC("A");
     bob.sharedData = _SC("1234");
-    
+
     RootTable().SetInstance(_SC("bob"), &bob);
 
     Script script;
@@ -165,43 +167,37 @@ TEST_F(SqratTest, ClassInstances) {
 }
 
 
-class B 
+class B
 {
 private:
     int value;
 public:
     B(): value(-1) {}
-    
-    int set(int v)
-    {
+
+    int set(int v) {
         value = v;
     }
-    int get()
-    {
+    int get() {
         //std::cout << "B's address is " << (long) this << std::endl;
         return value;
     }
-    
-    B& getB()
-    {
+
+    B& getB() {
         return *this;
     }
 
-    B& getB2(int, char *)
-    {
+    B& getB2(int, char *) {
         return *this;
     }
 
-    B& getB4( const B, B *, const B, int)
-    {
+    B& getB4( const B, B *, const B, int) {
         return *this;
     }
-    
-    B* getBPtr()
-    {
+
+    B* getBPtr() {
         return this;
     }
-    
+
     static string shared;
     static int sharedInt;
 };
@@ -210,7 +206,8 @@ public:
 string B::shared ;
 int B::sharedInt = -1;
 
-TEST_F(SqratTest, InstanceReferencesAndStaticMembers) {
+TEST_F(SqratTest, InstanceReferencesAndStaticMembers)
+{
     DefaultVM::Set(vm);
 
     Class<B> _B;
@@ -223,9 +220,9 @@ TEST_F(SqratTest, InstanceReferencesAndStaticMembers) {
     .Func(_SC("getBPtr"), &B::getBPtr)
     .StaticVar(_SC("shared"), &B::shared)
     .StaticVar(_SC("sharedInt"), &B::sharedInt);
-    
+
     RootTable().Bind(_SC("B"), _B);
-    
+
     Script script;
     try {
         script.CompileString(_SC(" \
@@ -275,18 +272,16 @@ TEST_F(SqratTest, InstanceReferencesAndStaticMembers) {
 			gTest.EXPECT_INT_EQ(bb.sharedInt, 9999); \
 			gTest.EXPECT_INT_EQ(b1.sharedInt, 9999); \
             "));
-    }
-    catch (Sqrat::Exception ex) {
+    } catch (Sqrat::Exception ex) {
         FAIL() << _SC("Compile Failed: ") << ex.Message();
     }
 
     try {
         script.Run();
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
+
 }
 
 class A
@@ -295,47 +290,45 @@ protected:
     int v;
 public:
     A(): v(-1) {}
-    int getv() 
-    {
+    int getv() {
         return v;
     }
-    
-    
+
+
 };
 
 
 class AA: public A
 {
 public:
-    int setv(int v_) 
-    {
+    int setv(int v_) {
         v = v_;
     }
-    
-    
+
+
 };
 
 
 class AAA: public AA
 {
-    
-    
+
+
 };
 
 class AB: public A, public B
 {
-    
-    
+
+
 };
 
 class BB: public B
 {
-    
+
 };
 
 int abc(A & a, AA & aa, AB *ab)
 {
-    aa.setv(12);    
+    aa.setv(12);
     ab->set(34);
     return a.getv();
 }
@@ -346,23 +339,22 @@ public:
     void f1(A &a) {}
     void f2(A * a) {}
 
-    void f3(AAA aaa) 
-    {   
+    void f3(AAA aaa) {
     }
 
-    void f4(const AB ab) {}    
-    int abc(A * a, AA & aa, B *b)
-    {
-        aa.setv(12);    
+    void f4(const AB ab) {}
+    int abc(A * a, AA & aa, B *b) {
+        aa.setv(12);
         b->set(34);
         return a->getv();
     }
-    
+
 };
 
-        
-    
-TEST_F(SqratTest, SimpleTypeChecking) {
+
+
+TEST_F(SqratTest, SimpleTypeChecking)
+{
     DefaultVM::Set(vm);
 
     Class<B> _B(vm, _SC("B"));
@@ -371,12 +363,12 @@ TEST_F(SqratTest, SimpleTypeChecking) {
     .Func(_SC("get"), &B::get)
     .Func(_SC("getB"), &B::getB)
     .Func(_SC("getBPtr"), &B::getBPtr);
-    
+
     RootTable().Bind(_SC("B"), _B);
 
     DerivedClass<BB, B> _BB(vm, _SC("BB"));
     RootTable().Bind(_SC("BB"), _BB);
-    
+
     Class<A> _A(vm, _SC("A"));
     RootTable().Bind(_SC("A"), _A);
     DerivedClass<AA, A> _AA(vm, _SC("AA"));
@@ -391,11 +383,11 @@ TEST_F(SqratTest, SimpleTypeChecking) {
     _W.Func(_SC("f3"), &W::f3);
     _W.Func(_SC("f4"), &W::f4);
     _W.Func(_SC("abc"), &W::abc);
-    
+
     RootTable().Bind(_SC("W"), _W);
 
     RootTable().Func(_SC("abc"), &abc);
-    
+
     Script script;
     try {
         script.CompileString(_SC(" \
@@ -473,18 +465,14 @@ TEST_F(SqratTest, SimpleTypeChecking) {
             gTest.EXPECT_TRUE(raised); \
             \
             "));
-    }
-    catch (Sqrat::Exception ex) {
+    } catch (Sqrat::Exception ex) {
         FAIL() << _SC("Compile Failed: ") << ex.Message();
     }
 
     try {
         script.Run();
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
-}
 
-    
+}

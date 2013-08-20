@@ -33,7 +33,8 @@ struct Item {
     string name;
 };
 
-class Player {
+class Player
+{
 public:
     Player() : health(10) {};
 
@@ -74,7 +75,8 @@ private:
     Item rightHand;
 };
 
-TEST_F(SqratTest, ClassProperties) {
+TEST_F(SqratTest, ClassProperties)
+{
     DefaultVM::Set(vm);
 
     RootTable().Bind(_SC("Item"),

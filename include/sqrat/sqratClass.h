@@ -54,8 +54,7 @@ namespace Sqrat
 template<class C, class A = DefaultAllocator<C> >
 class Class : public Object
 {
-    static SQInteger cleanup_hook(SQUserPointer p, SQInteger size)
-    {
+    static SQInteger cleanup_hook(SQUserPointer p, SQInteger size) {
         HSQUIRRELVM v = *(HSQUIRRELVM *) p;
         ClassTypeData<C, void>* ptr = static_cast<ClassTypeData<C, void>*>(ClassType<C>::getClassTypeData(v));
         delete ptr;
@@ -77,8 +76,8 @@ public:
             sq_getstackobj(vm, -1, &classObj);
             sq_addref(vm, &classObj); // must addref before the pop!
             sq_pop(vm, 1);
-            if (className.empty()) 
-#ifdef SQUNICODE                
+            if (className.empty())
+#ifdef SQUNICODE
                 InitClass(string_to_wstring(typeid(*this).name()));
 #else
                 InitClass(typeid(*this).name());
@@ -88,7 +87,7 @@ public:
             // install cleanup hook
             HSQUIRRELVM *p = (HSQUIRRELVM *) sq_newuserdata(v, sizeof(v));
             *p = v;
-            
+
             sq_setreleasehook(v, -1, cleanup_hook);
             // finish install cleanup hook
         }
@@ -188,7 +187,7 @@ public:
 
         return *this;
     }
-    
+
     /// Bind a class property (variable accessed via a setter and getter)
     template<class V>
     Class& Prop(const SQChar* name, V (C::*getMethod)() const, void (C::*setMethod)(V)) {
@@ -353,14 +352,14 @@ protected:
         sq_settypetag(vm, -1, ClassType<C>::getClassTypeData(vm));
 
         // add the default constructor
-        sq_pushstring(vm,_SC("constructor"), -1);
+        sq_pushstring(vm, _SC("constructor"), -1);
         sq_newclosure(vm, &A::New, 0);
         sq_newslot(vm, -3, false);
 
         // add the set table (static)
         HSQOBJECT& setTable = ClassType<C>::SetTable(vm);
         sq_resetobject(&setTable);
-        sq_pushstring(vm,_SC("__setTable"), -1);
+        sq_pushstring(vm, _SC("__setTable"), -1);
         sq_newtable(vm);
         sq_getstackobj(vm, -1, &setTable);
         sq_addref(vm, &setTable);
@@ -369,7 +368,7 @@ protected:
         // add the get table (static)
         HSQOBJECT& getTable = ClassType<C>::GetTable(vm);
         sq_resetobject(&getTable);
-        sq_pushstring(vm,_SC("__getTable"), -1);
+        sq_pushstring(vm, _SC("__getTable"), -1);
         sq_newtable(vm);
         sq_getstackobj(vm, -1, &getTable);
         sq_addref(vm, &getTable);
@@ -421,10 +420,10 @@ protected:
         sq_pop(vm, 1);
     }
 
-    
+
     // constructor binding
 
-    Class& BindConstructor(SQFUNCTION method, SQInteger nParams, const SQChar *name = 0){
+    Class& BindConstructor(SQFUNCTION method, SQInteger nParams, const SQChar *name = 0) {
         SQFUNCTION overload = SqOverloadFunc(method);
         bool alternative_global = false;
         if (name == 0)
@@ -432,92 +431,88 @@ protected:
         else alternative_global = true;
         string overloadName = SqOverloadName::Get(name, nParams);
 
-        if (!alternative_global )
-        {
+        if (!alternative_global ) {
             // push the class
             sq_pushobject(vm, ClassType<C>::ClassObject(vm));
-        }
-        else
-        {  // the containing environment is the root table??
-            sq_pushroottable(vm);            
+        } else {
+            // the containing environment is the root table??
+            sq_pushroottable(vm);
         }
         // Bind overload handler
         sq_pushstring(vm, name, -1);
         sq_pushstring(vm, name, -1); // function name is passed as a free variable
         sq_newclosure(vm, overload, 1);
         sq_newslot(vm, -3, false);
-        
+
         // Bind overloaded allocator function
-        
+
         sq_pushstring(vm, overloadName.c_str(), -1);
         sq_newclosure(vm, method, 0);
-        sq_setparamscheck(vm,nParams + 1,NULL);
+        sq_setparamscheck(vm, nParams + 1, NULL);
         sq_newslot(vm, -3, false);
         sq_pop(vm, 1);
         return *this;
     }
-    
-    void setDefaultCtor() 
-    {
+
+    void setDefaultCtor() {
         ClassTypeDataBase *type_data = ClassType<C>::getClassTypeData(vm);
-        if (type_data->ctorCalled == false)
-        {
+        if (type_data->ctorCalled == false) {
             Ctor(); // set up default constructor with the 'constructor' override
             type_data->ctorCalled = true;
         }
     }
-public:        
+public:
     Class& Ctor(const SQChar *name = 0) {
         return BindConstructor(A::template iNew<0>, 0, name);
     }
-    
+
     template<class A1>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1>,1, name);
+        return BindConstructor(A::template iNew<A1>, 1, name);
     }
-    template<class A1,class A2>
+    template<class A1, class A2>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1,A2>,2, name);
+        return BindConstructor(A::template iNew<A1, A2>, 2, name);
     }
-    template<class A1,class A2,class A3>
+    template<class A1, class A2, class A3>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1,A2,A3>,3, name);
+        return BindConstructor(A::template iNew<A1, A2, A3>, 3, name);
     }
-    template<class A1,class A2,class A3,class A4>
+    template<class A1, class A2, class A3, class A4>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1,A2,A3,A4>,4, name);
+        return BindConstructor(A::template iNew<A1, A2, A3, A4>, 4, name);
     }
-    template<class A1,class A2,class A3,class A4,class A5>
+    template<class A1, class A2, class A3, class A4, class A5>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1,A2,A3,A4,A5>,5, name);
+        return BindConstructor(A::template iNew<A1, A2, A3, A4, A5>, 5, name);
     }
-    template<class A1,class A2,class A3,class A4,class A5,class A6>
+    template<class A1, class A2, class A3, class A4, class A5, class A6>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1,A2,A3,A4,A5,A6>,6, name);
+        return BindConstructor(A::template iNew<A1, A2, A3, A4, A5, A6>, 6, name);
     }
-    template<class A1,class A2,class A3,class A4,class A5,class A6,class A7>
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1,A2,A3,A4,A5,A6,A7>,7, name);
+        return BindConstructor(A::template iNew<A1, A2, A3, A4, A5, A6, A7>, 7, name);
     }
-    template<class A1,class A2,class A3,class A4,class A5,class A6,class A7,class A8>
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1,A2,A3,A4,A5,A6,A7,A8>,8, name);
+        return BindConstructor(A::template iNew<A1, A2, A3, A4, A5, A6, A7, A8>, 8, name);
     }
-    template<class A1,class A2,class A3,class A4,class A5,class A6,class A7,class A8,class A9>
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
     Class& Ctor(const SQChar *name = 0) {
         setDefaultCtor();
-        return BindConstructor(A::template iNew<A1,A2,A3,A4,A5,A6,A7,A8,A9>,9, name);
+        return BindConstructor(A::template iNew<A1, A2, A3, A4, A5, A6, A7, A8, A9>, 9, name);
     }
 
-    
+
 };
 
 
@@ -538,8 +533,7 @@ public:
 template<class C, class B, class A = DefaultAllocator<C> >
 class DerivedClass : public Class<C, A>
 {
-    static SQInteger cleanup_hook(SQUserPointer p, SQInteger size)
-    {
+    static SQInteger cleanup_hook(SQUserPointer p, SQInteger size) {
         HSQUIRRELVM v = *(HSQUIRRELVM *) p;
         ClassTypeData<C, B>* ptr = static_cast<ClassTypeData<C, B>*>(ClassType<C>::getClassTypeData(v));
         delete ptr;
@@ -558,8 +552,8 @@ public:
             sq_getstackobj(v, -1, &classObj);
             sq_addref(v, &classObj); // must addref before the pop!
             sq_pop(v, 1);
-            if (className.empty()) 
-#ifdef SQUNICODE                
+            if (className.empty())
+#ifdef SQUNICODE
                 InitDerivedClass(v, string_to_wstring(typeid(*this).name()));
 #else
                 InitDerivedClass(v, typeid(*this).name());
@@ -587,7 +581,7 @@ protected:
         // set the typetag of the class
         sq_settypetag(vm, -1, ClassType<C>::getClassTypeData(vm));
         // add the default constructor
-        sq_pushstring(vm,_SC("constructor"), -1);
+        sq_pushstring(vm, _SC("constructor"), -1);
         sq_newclosure(vm, &A::New, 0);
         sq_newslot(vm, -3, false);
 
@@ -595,7 +589,7 @@ protected:
         HSQOBJECT& setTable = ClassType<C>::SetTable(vm);
         sq_resetobject(&setTable);
         sq_pushobject(vm, ClassType<B>::SetTable(vm));
-        sq_pushstring(vm,_SC("__setTable"), -1);
+        sq_pushstring(vm, _SC("__setTable"), -1);
         sq_clone(vm, -2);
         sq_remove(vm, -3);
         sq_getstackobj(vm, -1, &setTable);
@@ -606,7 +600,7 @@ protected:
         HSQOBJECT& getTable = ClassType<C>::GetTable(vm);
         sq_resetobject(&getTable);
         sq_pushobject(vm, ClassType<B>::GetTable(vm));
-        sq_pushstring(vm,_SC("__getTable"), -1);
+        sq_pushstring(vm, _SC("__getTable"), -1);
         sq_clone(vm, -2);
         sq_remove(vm, -3);
         sq_getstackobj(vm, -1, &getTable);

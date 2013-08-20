@@ -29,11 +29,13 @@
 
 using namespace Sqrat;
 
-const Sqrat::string GetGreeting() {
+const Sqrat::string GetGreeting()
+{
     return _SC("Hello world!");
 }
 
-const int AddTwo(int a, int b) {
+const int AddTwo(int a, int b)
+{
     return a + b;
 }
 
@@ -43,22 +45,22 @@ struct Person {
 };
 
 static bool get_object_string(HSQUIRRELVM vm, HSQOBJECT obj, string & out_string)
-{    
+{
     sq_pushobject(vm, obj);
     sq_tostring(vm, -1);
     const SQChar *s;
     SQRESULT res = sq_getstring(vm, -1, &s);
     bool r = SQ_SUCCEEDED(res);
-    if (r) 
-    {
+    if (r) {
         out_string = string(s);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
     }
     return r;
-    
+
 }
 
-TEST_F(SqratTest, SimpleTableBinding) {
+TEST_F(SqratTest, SimpleTableBinding)
+{
     DefaultVM::Set(vm);
 
     string version = _SC("1.0.0");
@@ -91,17 +93,16 @@ TEST_F(SqratTest, SimpleTableBinding) {
     Table::iterator it;
     string  str1, str2;
 
-    while (test.Next(it)) 
-    {
+    while (test.Next(it)) {
         EXPECT_TRUE(get_object_string(vm, it.getKey(), str1));
         EXPECT_TRUE(get_object_string(vm, it.getValue(), str2));
-#ifndef SQUNICODE        
-        std::cout << "Key: " 
-        << str1 << " Value: " 
-        << str2 << std::endl;
-#endif        
+#ifndef SQUNICODE
+        std::cout << "Key: "
+                  << str1 << " Value: "
+                  << str2 << std::endl;
+#endif
     }
-        
+
     Script script;
 
     try {
@@ -129,7 +130,8 @@ TEST_F(SqratTest, SimpleTableBinding) {
     }
 }
 
-TEST_F(SqratTest, TableGet) {
+TEST_F(SqratTest, TableGet)
+{
 
     static const SQChar *sq_code = _SC("\
         local i; \
@@ -142,10 +144,10 @@ TEST_F(SqratTest, TableGet) {
            ");
     int i;
     DefaultVM::Set(vm);
-    
+
     Table table(vm);
     RootTable(vm).Bind(_SC("tb"), table);
-        
+
     Script script;
     try {
         script.CompileString(sq_code);
@@ -158,16 +160,15 @@ TEST_F(SqratTest, TableGet) {
     } catch(Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
+
     const int length = 12;
-    
-    for ( i = 0; i < length; i++)
-    {
+
+    for ( i = 0; i < length; i++) {
 #ifdef SQUNICODE
         std::wstringstream ss1, ss2;
-#else        
+#else
         std::stringstream ss1, ss2;
-#endif        
+#endif
         string key, value, value2;
         ss1 << i;
         ss2 << "value " << i;
@@ -175,25 +176,23 @@ TEST_F(SqratTest, TableGet) {
         value = ss2.str();
         int j = table.GetValue(key.c_str(), value2);
         EXPECT_EQ(j, 1);
-        EXPECT_EQ(value, value2);        
+        EXPECT_EQ(value, value2);
     }
-    
-    for ( i = 100; i < 100 + length; i++)
-    {
+
+    for ( i = 100; i < 100 + length; i++) {
 #ifdef SQUNICODE
         std::wstringstream ss2;
-#else        
+#else
         std::stringstream ss2;
 #endif
         string value, value2;
 
         ss2 << "value " << i;
-        
+
         value = ss2.str();
         int j = table.GetValue(i, value2);
         EXPECT_EQ(j, 1);
-        EXPECT_EQ(value, value2);        
+        EXPECT_EQ(value, value2);
     }
-        
-}
 
+}

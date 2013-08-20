@@ -33,20 +33,22 @@
 
 #include "sqratObject.h"
 
-namespace Sqrat {
+namespace Sqrat
+{
 
 //
 // Enumerations
 //
 
-class Enumeration : public Object {
+class Enumeration : public Object
+{
 public:
     Enumeration(HSQUIRRELVM v = DefaultVM::Get(), bool createTable = true) : Object(v, false) {
         if(createTable) {
             sq_newtable(vm);
-            sq_getstackobj(vm,-1,&obj);
+            sq_getstackobj(vm, -1, &obj);
             sq_addref(vm, &obj);
-            sq_pop(vm,1);
+            sq_pop(vm, 1);
         }
     }
 
@@ -75,12 +77,13 @@ public:
 // Constants
 //
 
-class ConstTable : public Enumeration {
+class ConstTable : public Enumeration
+{
 public:
     ConstTable(HSQUIRRELVM v = DefaultVM::Get()) : Enumeration(v, false) {
         sq_pushconsttable(vm);
-        sq_getstackobj(vm,-1, &obj);
-        sq_pop(v,1); // No addref needed, since the consttable is always around
+        sq_getstackobj(vm, -1, &obj);
+        sq_pop(v, 1); // No addref needed, since the consttable is always around
     }
 
     //
@@ -111,7 +114,7 @@ public:
         sq_pushstring(vm, name, -1);
         sq_pushobject(vm, en.GetObject());
         sq_newslot(vm, -3, false);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
         return *this;
     }
 };

@@ -52,68 +52,68 @@ int f3(int a1, int a2, int a3)
 
 int f4(int a1, int a2, int a3, int a4)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4);
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4);
 }
 
 
 int f5(int a1, int a2, int a3, int a4, int a5)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5);
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5);
 }
 
 
 int f6(int a1, int a2, int a3, int a4, int a5, int a6)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6);
 }
 
 int f7(int a1, int a2, int a3, int a4, int a5, int a6, int a7)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7);
 }
 
 int f8(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7) && (a8 == 8);
 }
 
 int f9(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
        int a9)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9);
 }
 
 int f10(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
         int a9, int a10)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10);
 }
 
 int f11(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
         int a9, int a10, int a11)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
-           && (a6 == 6) && (a7 == 7) && (a8 == 8)&& (a9 == 9) && (a10 == 10)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+           && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10)
            && (a11 == 11);
 }
 
 int f12(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
         int a9, int a10, int a11, int a12)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
-           && (a6 == 6) && (a7 == 7) && (a8 == 8)&& (a9 == 9) && (a10 == 10)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+           && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10)
            && (a11 == 11) && (a12 == 12);
 }
 
 int f13(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
         int a9, int a10, int a11, int a12, int a13)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10)
            && (a11 == 11) && (a12 == 12) && (a13 == 13);
 }
@@ -121,12 +121,13 @@ int f13(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
 int f14(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
         int a9, int a10, int a11, int a12, int a13, int a14)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
-           && (a6 == 6) && (a7 == 7) && (a8 == 8)&& (a9 == 9) && (a10 == 10)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+           && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10)
            && (a11 == 11) && (a12 == 12) && (a13 == 13) && (a14 == 14);
 }
 
-TEST_F(SqratTest, GlobalFunction) {
+TEST_F(SqratTest, GlobalFunction)
+{
     DefaultVM::Set(vm);
 
     RootTable().Func(_SC("f0"), &f0);
@@ -227,68 +228,68 @@ int C::f3(int a1, int a2, int a3)
 
 int C::f4(int a1, int a2, int a3, int a4)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4);
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4);
 }
 
 
 int C::f5(int a1, int a2, int a3, int a4, int a5)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5);
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5);
 }
 
 
 int C::f6(int a1, int a2, int a3, int a4, int a5, int a6)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6);
 }
 
 int C::f7(int a1, int a2, int a3, int a4, int a5, int a6, int a7)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7);
 }
 
 int C::f8(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7) && (a8 == 8);
 }
 
 int C::f9(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
           int a9)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9);
 }
 
 int C::f10(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
            int a9, int a10)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10);
 }
 
 int C::f11(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
            int a9, int a10, int a11)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
-           && (a6 == 6) && (a7 == 7) && (a8 == 8)&& (a9 == 9) && (a10 == 10)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+           && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10)
            && (a11 == 11);
 }
 
 int C::f12(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
            int a9, int a10, int a11, int a12)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
-           && (a6 == 6) && (a7 == 7) && (a8 == 8)&& (a9 == 9) && (a10 == 10)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+           && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10)
            && (a11 == 11) && (a12 == 12);
 }
 
 int C::f13(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
            int a9, int a10, int a11, int a12, int a13)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
            && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10)
            && (a11 == 11) && (a12 == 12) && (a13 == 13);
 }
@@ -296,12 +297,13 @@ int C::f13(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
 int C::f14(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8,
            int a9, int a10, int a11, int a12, int a13, int a14)
 {
-    return (a1 == 1)&& (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
-           && (a6 == 6) && (a7 == 7) && (a8 == 8)&& (a9 == 9) && (a10 == 10)
+    return (a1 == 1) && (a2 == 2) && (a3 == 3) && (a4 == 4) && (a5 == 5)
+           && (a6 == 6) && (a7 == 7) && (a8 == 8) && (a9 == 9) && (a10 == 10)
            && (a11 == 11) && (a12 == 12) && (a13 == 13) && (a14 == 14);
 }
 
-TEST_F(SqratTest, MemberFunction) {
+TEST_F(SqratTest, MemberFunction)
+{
     DefaultVM::Set(vm);
 
     Class<C> CC;
@@ -354,4 +356,3 @@ TEST_F(SqratTest, MemberFunction) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
 }
-

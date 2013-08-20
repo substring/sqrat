@@ -27,7 +27,8 @@
 
 using namespace Sqrat;
 
-TEST_F(SqratTest, LoadScriptFromString) {
+TEST_F(SqratTest, LoadScriptFromString)
+{
     //
     // Compile and run from string
     //
@@ -52,7 +53,8 @@ TEST_F(SqratTest, LoadScriptFromString) {
     }
 }
 
-TEST_F(SqratTest, LoadScriptFromFile) {
+TEST_F(SqratTest, LoadScriptFromFile)
+{
     //
     // Compile and run from file
     //

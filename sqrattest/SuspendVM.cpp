@@ -26,15 +26,14 @@
 #include <sqrat.h>
 #include "Fixture.h"
 /* test demonstrating Sourceforge bug 3507590 */
-   
+
 using namespace Sqrat;
 
 class C
 {
-    
+
 public:
-    int suspend()
-    {
+    int suspend() {
         return sq_suspendvm(DefaultVM::Get());
     }
 };
@@ -43,24 +42,22 @@ public:
 TEST_F(SqratTest, SuspendVM)
 {
     DefaultVM::Set(vm);
-    int i; 
+    int i;
     Class<C> cclass;
     cclass.Func(_SC("suspend"), &C::suspend);
-    
+
     RootTable().Bind(_SC("C"), cclass);
     Script script;
-    try 
-    {
+    try {
         script.CompileString(_SC("\
             c <- C(); \
             //c.suspend(); /* this would fail in the curent Sqrat; no solution yet */\
             ::suspend(); \
             gTest.EXPECT_INT_EQ(1, 0); /* should not reach here */ \
             "));
-        
-    } catch (Exception ex)
-    {
-        FAIL() << _SC("Compile Failed: ") << ex.Message();        
+
+    } catch (Exception ex) {
+        FAIL() << _SC("Compile Failed: ") << ex.Message();
     }
 
     try {
@@ -68,5 +65,5 @@ TEST_F(SqratTest, SuspendVM)
     } catch(Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
+
 }

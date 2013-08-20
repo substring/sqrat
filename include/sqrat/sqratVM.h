@@ -59,20 +59,17 @@ private:
     Sqrat::Script* m_script;
     Sqrat::string m_lastErrorMsg;
 
-    static void s_addVM(HSQUIRRELVM vm, SqratVM* sqratvm)
-    {
+    static void s_addVM(HSQUIRRELVM vm, SqratVM* sqratvm) {
         //TODO: use mutex to lock ms_sqratVMs
         (*ms_sqratVMs()).insert(std::make_pair(vm, sqratvm));
     }
 
-    static void s_deleteVM(HSQUIRRELVM vm)
-    {
+    static void s_deleteVM(HSQUIRRELVM vm) {
         //TODO: use mutex to lock ms_sqratVMs
         (*ms_sqratVMs()).erase(vm);
     }
 
-    static SqratVM* s_getVM(HSQUIRRELVM vm)
-    {
+    static SqratVM* s_getVM(HSQUIRRELVM vm) {
         //TODO: use mutex to lock ms_sqratVMs
         return  (*ms_sqratVMs())[vm];
     }
@@ -80,36 +77,29 @@ private:
 
 private:
 
-    static std::map<HSQUIRRELVM, SqratVM*> *ms_sqratVMs()
-    {
+    static std::map<HSQUIRRELVM, SqratVM*> *ms_sqratVMs() {
         static std::map<HSQUIRRELVM, SqratVM*> *ms = 0;
         if (ms == 0)
             ms = new std::map<HSQUIRRELVM, SqratVM*> ;
         return ms;
     }
 
-    static void printFunc(HSQUIRRELVM v, const SQChar *s, ...)
-    {
+    static void printFunc(HSQUIRRELVM v, const SQChar *s, ...) {
         va_list vl;
         va_start(vl, s);
         scvprintf(s, vl);
         va_end(vl);
     }
 
-    static SQInteger runtimeErrorHandler(HSQUIRRELVM v)
-    {
+    static SQInteger runtimeErrorHandler(HSQUIRRELVM v) {
         const SQChar *sErr = 0;
-        if(sq_gettop(v) >= 1)
-        {
+        if(sq_gettop(v) >= 1) {
             Sqrat::string& errStr = s_getVM(v)->m_lastErrorMsg;
-            if(SQ_SUCCEEDED(sq_getstring(v, 2, &sErr)))
-            {
+            if(SQ_SUCCEEDED(sq_getstring(v, 2, &sErr))) {
                 //scprintf(_SC("RuntimeError: %s\n"), sErr);
                 //errStr = _SC("RuntimeError: ") + sErr;
                 errStr = sErr;
-            }
-            else
-            {
+            } else {
                 //scprintf(_SC("An Unknown RuntimeError Occured.\n"));
                 errStr = _SC("An Unknown RuntimeError Occured.");
             }
@@ -121,8 +111,7 @@ private:
                                      const SQChar* desc,
                                      const SQChar* source,
                                      SQInteger line,
-                                     SQInteger column)
-    {
+                                     SQInteger column) {
         //scprintf(_SC("%s(%d:%d): %s\n"), source, line, column, desc);
         SQChar buf[512];
         scsprintf(buf, _SC("%s(%d:%d): %s"), source, (int) line, (int) column, desc);
@@ -131,16 +120,14 @@ private:
     }
 
 public:
-    enum ERROR_STATE
-    {
+    enum ERROR_STATE {
         SQRAT_NO_ERROR, SQRAT_COMPILE_ERROR, SQRAT_RUNTIME_ERROR
     };
 
     SqratVM(int initialStackSize = 1024): m_vm(sq_open(initialStackSize))
         , m_rootTable(new Sqrat::RootTable(m_vm))
         , m_script(new Sqrat::Script(m_vm))
-        , m_lastErrorMsg()
-    {
+        , m_lastErrorMsg() {
         s_addVM(m_vm, this);
         //register std libs
         sq_pushroottable(m_vm);
@@ -154,8 +141,7 @@ public:
         setErrorHandler(runtimeErrorHandler, compilerErrorHandler);
     }
 
-    ~SqratVM()
-    {
+    ~SqratVM() {
         s_deleteVM(m_vm);
         delete m_script;
         delete m_rootTable;
@@ -163,57 +149,45 @@ public:
     }
 
 
-    HSQUIRRELVM getVM()
-    {
+    HSQUIRRELVM getVM() {
         return m_vm;
     }
-    Sqrat::RootTable& getRootTable()
-    {
+    Sqrat::RootTable& getRootTable() {
         return *m_rootTable;
     }
-    Sqrat::Script& getScript()
-    {
+    Sqrat::Script& getScript() {
         return *m_script;
     }
 
-    Sqrat::string getLastErrorMsg()
-    {
+    Sqrat::string getLastErrorMsg() {
         return m_lastErrorMsg;
     }
-    void setLastErrorMsg(const Sqrat::string& str)
-    {
+    void setLastErrorMsg(const Sqrat::string& str) {
         m_lastErrorMsg = str;
     }
 
-    void setPrintFunc(SQPRINTFUNCTION printFunc, SQPRINTFUNCTION errFunc)
-    {
+    void setPrintFunc(SQPRINTFUNCTION printFunc, SQPRINTFUNCTION errFunc) {
         sq_setprintfunc(m_vm, printFunc, errFunc);
     }
 
-    void setErrorHandler(SQFUNCTION runErr, SQCOMPILERERROR comErr)
-    {
+    void setErrorHandler(SQFUNCTION runErr, SQCOMPILERERROR comErr) {
         sq_newclosure(m_vm, runErr, 0);
         sq_seterrorhandler(m_vm);
         sq_setcompilererrorhandler(m_vm, comErr);
     }
 
 
-    ERROR_STATE doString(const Sqrat::string& str)
-    {
+    ERROR_STATE doString(const Sqrat::string& str) {
         Sqrat::string msg;
         m_lastErrorMsg.clear();
-        if(!m_script->CompileString(str, msg))
-        {
-            if(m_lastErrorMsg.empty())
-            {
+        if(!m_script->CompileString(str, msg)) {
+            if(m_lastErrorMsg.empty()) {
                 m_lastErrorMsg = msg;
             }
             return SQRAT_COMPILE_ERROR;
         }
-        if(!m_script->Run(msg))
-        {
-            if(m_lastErrorMsg.empty())
-            {
+        if(!m_script->Run(msg)) {
+            if(m_lastErrorMsg.empty()) {
                 m_lastErrorMsg = msg;
             }
             return SQRAT_RUNTIME_ERROR;
@@ -221,22 +195,17 @@ public:
         return SQRAT_NO_ERROR;
     }
 
-    ERROR_STATE doFile(const Sqrat::string& file)
-    {
+    ERROR_STATE doFile(const Sqrat::string& file) {
         Sqrat::string msg;
         m_lastErrorMsg.clear();
-        if(!m_script->CompileFile(file, msg))
-        {
-            if(m_lastErrorMsg.empty())
-            {
+        if(!m_script->CompileFile(file, msg)) {
+            if(m_lastErrorMsg.empty()) {
                 m_lastErrorMsg = msg;
             }
             return SQRAT_COMPILE_ERROR;
         }
-        if(!m_script->Run(msg))
-        {
-            if(m_lastErrorMsg.empty())
-            {
+        if(!m_script->Run(msg)) {
+            if(m_lastErrorMsg.empty()) {
                 m_lastErrorMsg = msg;
             }
             return SQRAT_RUNTIME_ERROR;

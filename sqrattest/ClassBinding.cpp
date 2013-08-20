@@ -29,70 +29,64 @@
 using namespace Sqrat;
 
 
-class C {
-    void default_values()
-    {
-         i = -1;
-         s = _SC("uninitialized");
-         f = -2.0;
-         s2 = _SC("not initialized");
+class C
+{
+    void default_values() {
+        i = -1;
+        s = _SC("uninitialized");
+        f = -2.0;
+        s2 = _SC("not initialized");
     }
 public:
     int i;
     string s;
     float f;
     string s2;
-    
-    C() 
-    {
+
+    C() {
         default_values();
-#ifndef  SQUNICODE       
+#ifndef  SQUNICODE
         std::cout << i << " " << s << " " << f << " " << s2 << std::endl;
 #endif
     }
-    
-    C(int i_)
-    {
+
+    C(int i_) {
         default_values();
         i = i_;
-#ifndef  SQUNICODE       
+#ifndef  SQUNICODE
         std::cout << i << " " << s << " " << f << " " << s2 << std::endl;
-#endif        
+#endif
     }
-    C(int i_, const SQChar *s_) 
-    {
+    C(int i_, const SQChar *s_) {
         default_values();
         i = i_;
         s = string(s_);
-#ifndef  SQUNICODE       
+#ifndef  SQUNICODE
         std::cout << i << " " << s << " " << f << " " << s2 << std::endl;
 #endif
     }
-    
-    C(const SQChar *s2_, float f_)
-    {
+
+    C(const SQChar *s2_, float f_) {
         default_values();
         s2 = string(s2_);
         f = f_;
-#ifndef  SQUNICODE       
+#ifndef  SQUNICODE
         std::cout << i << " " << s << " " << f << " " << s2 << std::endl;
 #endif
-        
+
     }
-    C(int i_, const SQChar *s_, float f_)
-    {
+    C(int i_, const SQChar *s_, float f_) {
         default_values();
         i = i_;
         s = string(s_);
         f = f_;
-#ifndef  SQUNICODE       
+#ifndef  SQUNICODE
         std::cout << i << " " << s << " " << f << " " << s2 << std::endl;
 #endif
     }
-    
-    C(int i_, const SQChar *s_, float f_, const SQChar *s2_): i(i_), s(s_), f(f_), s2(s2_)
-    {
-#ifndef  SQUNICODE       
+
+    C(int i_, const SQChar *s_, float f_, const SQChar *s2_): i(i_), s(s_), f(f_), s2(s2_) {
+#ifndef  SQUNICODE
         std::cout << i << " " << s << " " << f << " " << s2 << std::endl;
 #endif
     }
@@ -101,9 +95,9 @@ public:
 TEST_F(SqratTest, Constructors)
 {
     DefaultVM::Set(vm);
-    
+
     Class<C> c_class(vm);
-    
+
     c_class
     .Var(_SC("i"), &C::i)
     .Var(_SC("s"), &C::s)
@@ -113,12 +107,12 @@ TEST_F(SqratTest, Constructors)
     .Ctor<int, const SQChar * >()
     //Ctor<const SQChar *, float >("make")
     .Ctor<int, const SQChar *, float >()
-    .Ctor<int, const SQChar *, float, const SQChar * >();  
+    .Ctor<int, const SQChar *, float, const SQChar * >();
 
     RootTable().Bind(_SC("C"), c_class);
 
     Script script;
-    
+
 
     try {
         script.CompileString(_SC(" \
@@ -170,17 +164,19 @@ TEST_F(SqratTest, Constructors)
     } catch(Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
+
 }
 
 
-const Sqrat::string Vec2ToString(const Vec2* v) {
+const Sqrat::string Vec2ToString(const Vec2* v)
+{
     std::basic_stringstream<SQChar> out;
     out << _SC("Vec2(") << v->x << _SC(", ") << v->y << _SC(")");
     return out.str();
 }
 
-TEST_F(SqratTest, SimpleClassBinding) {
+TEST_F(SqratTest, SimpleClassBinding)
+{
     DefaultVM::Set(vm);
 
     Class<Vec2> vec2;
@@ -241,32 +237,37 @@ TEST_F(SqratTest, SimpleClassBinding) {
     }
 }
 
-class Animal {
+class Animal
+{
 public:
     virtual string Speak() {
         return _SC("[Silent]");
     }
 };
 
-class Cat : public Animal {
+class Cat : public Animal
+{
 public:
     virtual string Speak() {
         return _SC("Meow!");
     }
 };
 
-class Dog : public Animal {
+class Dog : public Animal
+{
 public:
     virtual string Speak() {
         return _SC("Woof!");
     }
 };
 
-string MakeSpeak(Animal* a) {
+string MakeSpeak(Animal* a)
+{
     return a->Speak();
 }
 
-TEST_F(SqratTest, InheritedClassBinding) {
+TEST_F(SqratTest, InheritedClassBinding)
+{
     DefaultVM::Set(vm);
 
     // Defining class definitions inline
@@ -320,14 +321,16 @@ TEST_F(SqratTest, InheritedClassBinding) {
     }
 }
 
-class NativeObj {
+class NativeObj
+{
 public:
     int Id() {
         return 42;
     }
 };
 
-TEST_F(SqratTest, WeakRef) {
+TEST_F(SqratTest, WeakRef)
+{
     //
     // Ensure that weak referenceing work with Sqrat-bound classes
     // Created in response to a bug reported by emeyex
@@ -370,28 +373,24 @@ TEST_F(SqratTest, WeakRef) {
     }
 }
 
-class NumTypes 
+class NumTypes
 {
 public:
-    int g_int() 
-    {
+    int g_int() {
         return 3;
     }
-    double g_float() 
-    {
+    double g_float() {
         return 7.8;
     }
-    
-    bool g_true() 
-    {
+
+    bool g_true() {
         return true;
     }
-    
-    bool g_false()
-    {
+
+    bool g_false() {
         return false;
     }
-    
+
 };
 
 static const SQChar *num_conversions = _SC("\
@@ -424,20 +423,20 @@ static const SQChar *num_conversions = _SC("\
 	gTest.EXPECT_FLOAT_EQ(0.0, f); \
     \
     ");
-    
+
 TEST_F(SqratTest, NumConversion)
 {
     DefaultVM::Set(vm);
-    
+
     Sqrat::Class<NumTypes> numtypes(vm);
-    
+
     numtypes.Func(_SC("g_int"), &NumTypes::g_int);
     numtypes.Func(_SC("g_float"), &NumTypes::g_float);
     numtypes.Func(_SC("g_true"), &NumTypes::g_true);
     numtypes.Func(_SC("g_false"), &NumTypes::g_false);
 
     Sqrat::RootTable(vm).Bind(_SC("NumTypes"), numtypes);
-            
+
     Script script;
     try {
         script.CompileString(num_conversions);
@@ -455,11 +454,11 @@ TEST_F(SqratTest, NumConversion)
 
 enum  foo { BAR = 123, CAR, DEAR, EAR };
 
-class F 
+class F
 {
 public:
     static int bar;
-    
+
     int fn(foo foo_value) { return (int) foo_value; }
 };
 
@@ -470,16 +469,16 @@ TEST_F(SqratTest, CEnumBinding)
     Class<F> f_class(vm);
     int i = (int) BAR;
     f_class.SetStaticValue(_SC("bar"), i);
-    ASSERT_TRUE(1);    
+    ASSERT_TRUE(1);
     f_class.SetStaticValue(_SC("bar"), BAR);
-    ASSERT_TRUE(1);    
-    
+    ASSERT_TRUE(1);
+
     f_class.Func(_SC("fn"), &F::fn);
 
     RootTable().Bind(_SC("F"), f_class);
 
     Script script;
-    
+
 
     try {
         script.CompileString(_SC(" \
@@ -521,18 +520,18 @@ TEST_F(SqratTest, CEnumBinding)
     } catch(Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
+
 }
- 
+
 
 class NoDefaultConstructor
 {
 public:
-    
+
     NoDefaultConstructor(const char *s) {}
-    void f() {} 
+    void f() {}
     void fa(int b) {}
-    
+
     int v;
     static int sv;
 };
@@ -540,36 +539,35 @@ public:
 class NoDefaultConstructor2: public NoDefaultConstructor
 {
 public:
-    
+
     NoDefaultConstructor2(const char *s, const char *s1) : NoDefaultConstructor(s) { }
-    void f2() {} 
-    
+    void f2() {}
+
 };
 
-TEST_F(SqratTest, NoDefaultConstructorClasses) {
+TEST_F(SqratTest, NoDefaultConstructorClasses)
+{
     DefaultVM::Set(vm);
     NoDefaultConstructor n1("test");
     Class<NoDefaultConstructor> N(vm, _SC("N"));
     N.Ctor<char *>();
-    N.Func(_SC("f"), &NoDefaultConstructor::f);        
-    N.Func(_SC("fa"), &NoDefaultConstructor::fa);        
+    N.Func(_SC("f"), &NoDefaultConstructor::f);
+    N.Func(_SC("fa"), &NoDefaultConstructor::fa);
     N.Var(_SC("v"), &NoDefaultConstructor::v);
     RootTable().Bind(_SC("N"), N);
-    
+
     DerivedClass<NoDefaultConstructor2, NoDefaultConstructor> N2(vm, _SC("N2"));
     N2.Ctor<char *, char *>();
     N2.Func(_SC("f2"), &NoDefaultConstructor2::f2);
     RootTable().Bind(_SC("N2"), N2);
-    try 
-    {
+    try {
         N.SetStaticValue(_SC("sv"),  BAR);
-    }
-    catch (Sqrat::Exception ex) {
+    } catch (Sqrat::Exception ex) {
 #ifndef SQUNICODE
         std::cerr << _SC("set static var failed, ") << ex.Message();
 #endif
     }
-       
+
     Script script;
     try {
         script.CompileString(_SC(" \
@@ -608,19 +606,14 @@ TEST_F(SqratTest, NoDefaultConstructorClasses) {
             }\
             gTest.EXPECT_TRUE(raised); \
             "));
-    }
-    catch (Sqrat::Exception ex) {
+    } catch (Sqrat::Exception ex) {
         FAIL() << _SC("Compile Failed: ") << ex.Message();
     }
 
     try {
         script.Run();
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
+
 }
-
-
-        

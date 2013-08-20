@@ -36,9 +36,11 @@
 #include "sqratOverloadMethods.h"
 #include "sqratUtil.h"
 
-namespace Sqrat {
+namespace Sqrat
+{
 
-class Object {
+class Object
+{
 protected:
     HSQUIRRELVM vm;
     HSQOBJECT obj;
@@ -164,8 +166,7 @@ public:
     }
 
     template <class T>
-    inline Object operator[](T slot)
-    {
+    inline Object operator[](T slot) {
         return GetSlot(slot);
     }
 
@@ -176,20 +177,18 @@ public:
         sq_pop(vm, 1);
         return ret;
     }
-    
+
     template <class C>
-    Object& SetReleaseHook(){
+    Object& SetReleaseHook() {
         sq_pushobject(vm, GetObject());
         sq_setreleasehook(vm, -1, &DefaultAllocator<C>::Delete);
         sq_pop(vm, 1);
         return *this;
     }
-       
-    struct iterator
-    {
+
+    struct iterator {
         friend class Object;
-        iterator()
-        {
+        iterator() {
             Index = 0;
             sq_resetobject(&Key);
             sq_resetobject(&Value);
@@ -199,31 +198,27 @@ public:
         HSQOBJECT getKey() { return Key; }
         HSQOBJECT getValue() { return Value; }
     private:
-        
+
         HSQOBJECT Key;
         HSQOBJECT Value;
         SQInteger Index;
     };
 
-    bool Next(iterator& iter) const
-    {
-        sq_pushobject(vm,obj);
-        sq_pushinteger(vm,iter.Index);
-        if(SQ_SUCCEEDED(sq_next(vm,-2)))
-        {
-            sq_getstackobj(vm,-1,&iter.Value);
-            sq_getstackobj(vm,-2,&iter.Key);
-            sq_getinteger(vm,-3,&iter.Index);
-            sq_pop(vm,4);
+    bool Next(iterator& iter) const {
+        sq_pushobject(vm, obj);
+        sq_pushinteger(vm, iter.Index);
+        if(SQ_SUCCEEDED(sq_next(vm, -2))) {
+            sq_getstackobj(vm, -1, &iter.Value);
+            sq_getstackobj(vm, -2, &iter.Key);
+            sq_getinteger(vm, -3, &iter.Index);
+            sq_pop(vm, 4);
             return true;
-        }
-        else
-        {
-            sq_pop(vm,2);
+        } else {
+            sq_pop(vm, 2);
             return false;
         }
-    }    
-    
+    }
+
 protected:
     // Bind a function and it's associated Squirrel closure to the object
     inline void BindFunc(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
@@ -235,7 +230,7 @@ protected:
 
         sq_newclosure(vm, func, 1);
         sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
     }
 
     inline void BindFunc(const SQInteger index, void* method, size_t methodSize, SQFUNCTION func, bool staticVar = false) {
@@ -247,7 +242,7 @@ protected:
 
         sq_newclosure(vm, func, 1);
         sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
     }
 
 
@@ -270,7 +265,7 @@ protected:
         sq_newclosure(vm, func, 1);
         sq_newslot(vm, -3, staticVar);
 
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
     }
 
     // Set the value of a variable on the object. Changes to values set this way are not reciprocated
@@ -280,7 +275,7 @@ protected:
         sq_pushstring(vm, name, -1);
         PushVar(vm, val);
         sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
     }
     template<class V>
     inline void BindValue(const SQInteger index, const V& val, bool staticVar = false) {
@@ -288,7 +283,7 @@ protected:
         sq_pushinteger(vm, index);
         PushVar(vm, val);
         sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
     }
 
     // Set the value of an instance on the object. Changes to values set this way are reciprocated back to the source instance
@@ -298,7 +293,7 @@ protected:
         sq_pushstring(vm, name, -1);
         PushVar(vm, val);
         sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
     }
     template<class V>
     inline void BindInstance(const SQInteger index, V* val, bool staticVar = false) {
@@ -306,18 +301,19 @@ protected:
         sq_pushinteger(vm, index);
         PushVar(vm, val);
         sq_newslot(vm, -3, staticVar);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
     }
 };
 
 
 template<>
-inline void Object::BindValue<int>(const SQChar* name, const int & val, bool staticVar /* = false */) {
+inline void Object::BindValue<int>(const SQChar* name, const int & val, bool staticVar /* = false */)
+{
     sq_pushobject(vm, GetObject());
     sq_pushstring(vm, name, -1);
     PushVar<int>(vm, val);
     sq_newslot(vm, -3, staticVar);
-    sq_pop(vm,1); // pop table
+    sq_pop(vm, 1); // pop table
 }
 
 //

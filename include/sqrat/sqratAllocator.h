@@ -34,14 +34,16 @@
 #include "sqratObject.h"
 #include "sqratTypes.h"
 
-namespace Sqrat {
+namespace Sqrat
+{
 
 // utility taken from  http://stackoverflow.com/questions/2733377/is-there-a-way-to-test-whether-a-c-class-has-a-default-constructor-other-than/2770326#2770326
-// may be obsolete in C++ 11 
+// may be obsolete in C++ 11
 template< class T >
-class is_default_constructible {
+class is_default_constructible
+{
     template<int x>
-    class receive_size{};
+    class receive_size {};
 
     template< class U >
     static int sfinae( receive_size< sizeof U() > * );
@@ -57,33 +59,29 @@ public:
 //
 
 template<class C>
-class DefaultAllocator {
+class DefaultAllocator
+{
 
-    static SQInteger setInstance(HSQUIRRELVM vm, C* instance)
-    {
+    static SQInteger setInstance(HSQUIRRELVM vm, C* instance) {
         sq_setinstanceup(vm, 1, instance);
         sq_setreleasehook(vm, 1, &Delete);
         return 0;
     }
-    
-    template <class T, bool b> 
-    struct NewC
-    {
+
+    template <class T, bool b>
+    struct NewC {
         T* p;
-        NewC() 
-        {
-           p = new T();
-        }        
+        NewC() {
+            p = new T();
+        }
     };
 
     template <class T>
-    struct NewC<T, false>
-    {
+    struct NewC<T, false> {
         T* p;
-        NewC() 
-        {
-           p = 0;
-        }        
+        NewC() {
+            p = 0;
+        }
     };
 
 public:
@@ -97,8 +95,8 @@ public:
     static SQInteger iNew(HSQUIRRELVM vm) {
         return New(vm);
     }
-    
-   // following New functions are used only if constructors are bound via Ctor() in class    
+
+    // following New functions are used only if constructors are bound via Ctor() in class
 
     template <typename A1>
     static SQInteger iNew(HSQUIRRELVM vm) {
@@ -107,10 +105,10 @@ public:
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         return setInstance(vm, new C(
-            a1.value
-            ));
+                               a1.value
+                           ));
     }
-    template <typename A1,typename A2>
+    template <typename A1, typename A2>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
@@ -118,22 +116,22 @@ public:
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         return setInstance(vm, new C(
-            a1.value,
-            a2.value
-            ));
+                               a1.value,
+                               a2.value
+                           ));
     }
-    template <typename A1,typename A2,typename A3>
+    template <typename A1, typename A2, typename A3>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
         Var<A3> a3(vm, 4);
         return setInstance(vm, new C(
-            a1.value,
-            a2.value,
-            a3.value
-            ));
+                               a1.value,
+                               a2.value,
+                               a3.value
+                           ));
     }
-    template <typename A1,typename A2,typename A3,typename A4>
+    template <typename A1, typename A2, typename A3, typename A4>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
@@ -143,13 +141,13 @@ public:
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         return setInstance(vm, new C(
-            a1.value,
-            a2.value,
-            a3.value,
-            a4.value
-            ));
+                               a1.value,
+                               a2.value,
+                               a3.value,
+                               a4.value
+                           ));
     }
-    template <typename A1,typename A2,typename A3,typename A4,typename A5>
+    template <typename A1, typename A2, typename A3, typename A4, typename A5>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
@@ -160,14 +158,14 @@ public:
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         return setInstance(vm, new C(
-            a1.value,
-            a2.value,
-            a3.value,
-            a4.value,
-            a5.value
-            ));
+                               a1.value,
+                               a2.value,
+                               a3.value,
+                               a4.value,
+                               a5.value
+                           ));
     }
-    template <typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+    template <typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
@@ -179,15 +177,15 @@ public:
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         return setInstance(vm, new C(
-            a1.value,
-            a2.value,
-            a3.value,
-            a4.value,
-            a5.value,
-            a6.value
-            ));
+                               a1.value,
+                               a2.value,
+                               a3.value,
+                               a4.value,
+                               a5.value,
+                               a6.value
+                           ));
     }
-    template <typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+    template <typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
@@ -200,16 +198,16 @@ public:
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         return setInstance(vm, new C(
-            a1.value,
-            a2.value,
-            a3.value,
-            a4.value,
-            a5.value,
-            a6.value,
-            a7.value
-            ));
+                               a1.value,
+                               a2.value,
+                               a3.value,
+                               a4.value,
+                               a5.value,
+                               a6.value,
+                               a7.value
+                           ));
     }
-    template <typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+    template <typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
@@ -223,17 +221,17 @@ public:
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         return setInstance(vm, new C(
-            a1.value,
-            a2.value,
-            a3.value,
-            a4.value,
-            a5.value,
-            a6.value,
-            a7.value,
-            a8.value
-            ));
+                               a1.value,
+                               a2.value,
+                               a3.value,
+                               a4.value,
+                               a5.value,
+                               a6.value,
+                               a7.value,
+                               a8.value
+                           ));
     }
-    template <typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+    template <typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9>
     static SQInteger iNew(HSQUIRRELVM vm) {
         Var<A1> a1(vm, 2);
         Var<A2> a2(vm, 3);
@@ -248,20 +246,20 @@ public:
             return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         return setInstance(vm, new C(
-            a1.value,
-            a2.value,
-            a3.value,
-            a4.value,
-            a5.value,
-            a6.value,
-            a7.value,
-            a8.value,
-            a9.value
-            ));
+                               a1.value,
+                               a2.value,
+                               a3.value,
+                               a4.value,
+                               a5.value,
+                               a6.value,
+                               a7.value,
+                               a8.value,
+                               a9.value
+                           ));
     }
 
 public:
-    
+
     static SQInteger Copy(HSQUIRRELVM vm, SQInteger idx, const void* value) {
         C* instance = new C(*static_cast<const C*>(value));
         sq_setinstanceup(vm, idx, instance);
@@ -280,7 +278,8 @@ public:
 // NoConstructorAllocator
 //
 
-class NoConstructor {
+class NoConstructor
+{
 public:
     static SQInteger New(HSQUIRRELVM) {
         return 0;
@@ -298,7 +297,8 @@ public:
 //
 
 template<class C>
-class CopyOnly {
+class CopyOnly
+{
 public:
     static SQInteger New(HSQUIRRELVM) {
         return 0;
@@ -322,7 +322,8 @@ public:
 //
 
 template<class C>
-class NoCopy {
+class NoCopy
+{
 public:
     static SQInteger New(HSQUIRRELVM vm) {
         C* instance = new C();

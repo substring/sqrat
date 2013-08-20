@@ -53,7 +53,7 @@ struct ClassTypeDataBase {
     bool        ctorCalled;
     virtual ~ClassTypeDataBase() {}
     virtual SQUserPointer Cast(SQUserPointer ptr, SQUserPointer classType) = 0;
-    ClassTypeDataBase() : ctorCalled(false){}
+    ClassTypeDataBase() : ctorCalled(false) {}
 };
 
 template<class C, class B>
@@ -123,8 +123,7 @@ struct ClassType {
             sq_createinstance(vm, -1);
             sq_remove(vm, -2);
             sq_setinstanceup(vm, -1, ptr);
-        }
-        else 
+        } else
             sq_pushnull(vm);
     }
 
@@ -138,15 +137,12 @@ struct ClassType {
     static C* GetInstance(HSQUIRRELVM vm, SQInteger idx) {
         SQUserPointer ptr = NULL;
         ClassTypeDataBase* classType = getClassTypeData(vm);
-        if (classType != 0) /* type checking only done if the value has type data else it may be enum */
-        {
+        if (classType != 0) { /* type checking only done if the value has type data else it may be enum */
             if (SQ_FAILED(sq_getinstanceup(vm, idx, &ptr, classType))) {
                 Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, ClassName(vm)));
                 return NULL;
             }
-        }
-        else /* value is likely of integral type like enums, cannot return a pointer */
-        {
+        } else { /* value is likely of integral type like enums, cannot return a pointer */
             Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("unknown")));
             return NULL;
         }

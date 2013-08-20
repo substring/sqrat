@@ -12,9 +12,11 @@
 #include <sqrat.h>
 #include <gtest/gtest.h>
 
-namespace Sqrat {
+namespace Sqrat
+{
 
-class SqratTest : public ::testing::Test {
+class SqratTest : public ::testing::Test
+{
 protected:
     HSQUIRRELVM vm;
 
@@ -26,7 +28,7 @@ protected:
         sq_setprintfunc(vm, printfunc);
 #endif
 
-        sq_newclosure(vm, errorhandler,0);
+        sq_newclosure(vm, errorhandler, 0);
         sq_seterrorhandler(vm);
 
         BindTestFunctions();
@@ -42,7 +44,7 @@ protected:
 #define scvprintf vprintf
 #endif
 
-    static void printfunc(HSQUIRRELVM v,const SQChar *s,...) {
+    static void printfunc(HSQUIRRELVM v, const SQChar *s, ...) {
         va_list vl;
         va_start(vl, s);
         scvprintf(s, vl);
@@ -51,11 +53,10 @@ protected:
 
     static SQInteger errorhandler(HSQUIRRELVM v) {
         const SQChar *sErr = 0;
-        if(sq_gettop(v)>=1) {
-            if(SQ_SUCCEEDED(sq_getstring(v,2,&sErr)))   {
+        if(sq_gettop(v) >= 1) {
+            if(SQ_SUCCEEDED(sq_getstring(v, 2, &sErr)))   {
                 ADD_FAILURE() << _SC("A Script Error Occured: ") << sErr;
-            }
-            else {
+            } else {
                 ADD_FAILURE() << _SC("An Unknown Script Error Occured.") << sErr;
             }
         }

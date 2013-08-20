@@ -27,6 +27,5 @@
 #include <sqrat/sqratVM.h>
 #include "Fixture.h"
 /* test demonstrating Sourceforge bug 3507590 */
-   
-using namespace Sqrat;
 
+using namespace Sqrat;

@@ -34,15 +34,16 @@
 
 #include "sqratObject.h"
 
-namespace Sqrat {
+namespace Sqrat
+{
 
-class Script : public Object {
+class Script : public Object
+{
 public:
     Script(HSQUIRRELVM v = DefaultVM::Get()) : Object(v, false) {
     }
- 
-    ~Script()
-    {
+
+    ~Script() {
         if(!sq_isnull(obj)) {
             sq_release(vm, &obj);
         }
@@ -54,11 +55,11 @@ public:
         if(SQ_FAILED(sq_compilebuffer(vm, script.c_str(), static_cast<SQInteger>(script.size() /** sizeof(SQChar)*/), _SC(""), true))) {
             throw Exception(LastErrorString(vm));
         }
-        sq_getstackobj(vm,-1,&obj);
+        sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
         sq_pop(vm, 1);
     }
-    
+
     bool CompileString(const string& script, string& errMsg) {
         if(!sq_isnull(obj)) {
             sq_release(vm, &obj);
@@ -67,7 +68,7 @@ public:
             errMsg = LastErrorString(vm);
             return false;
         }
-        sq_getstackobj(vm,-1,&obj);
+        sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
         sq_pop(vm, 1);
         return true;
@@ -80,7 +81,7 @@ public:
         if(SQ_FAILED(sqstd_loadfile(vm, path.c_str(), true))) {
             throw Exception(LastErrorString(vm));
         }
-        sq_getstackobj(vm,-1,&obj);
+        sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
         sq_pop(vm, 1);
     }
@@ -93,7 +94,7 @@ public:
             errMsg = LastErrorString(vm);
             return false;
         }
-        sq_getstackobj(vm,-1,&obj);
+        sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
         sq_pop(vm, 1);
         return true;

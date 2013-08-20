@@ -35,9 +35,11 @@
 #include "sqratFunction.h"
 #include "sqratGlobalMethods.h"
 
-namespace Sqrat {
+namespace Sqrat
+{
 
-class TableBase : public Object {
+class TableBase : public Object
+{
 public:
     TableBase(HSQUIRRELVM v = DefaultVM::Get()) : Object(v, true) {
     }
@@ -54,7 +56,7 @@ public:
         sq_pushstring(vm, name, -1);
         sq_pushobject(vm, obj.GetObject());
         sq_newslot(vm, -3, false);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
     }
 
     // Bind a raw Squirrel closure to the Table
@@ -63,7 +65,7 @@ public:
         sq_pushstring(vm, name, -1);
         sq_newclosure(vm, func, 0);
         sq_newslot(vm, -3, false);
-        sq_pop(vm,1); // pop table
+        sq_pop(vm, 1); // pop table
 
         return *this;
     }
@@ -101,47 +103,43 @@ public:
         return *this;
     }
 
-    // get functions    
-        
+    // get functions
+
     template <typename T>
-    SQInteger GetValue(const SQChar* name, T& out_entry)
-    {
+    SQInteger GetValue(const SQChar* name, T& out_entry) {
         HSQOBJECT value = GetObject();
-        sq_pushobject(vm, value);        
+        sq_pushobject(vm, value);
         sq_pushstring(vm, name, -1);
-        if (SQ_FAILED(sq_get(vm, -2)))
-        {
+        if (SQ_FAILED(sq_get(vm, -2))) {
             sq_pop(vm, 1);
-            return sq_throwerror(vm, _SC("illegal index"));       
+            return sq_throwerror(vm, _SC("illegal index"));
         }
-            
+
         Var<T> entry(vm, -1);
         if (Sqrat::Error::Instance().Occurred(vm)) {
-            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());                    
+            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
         }
-        sq_pop(vm, 2);  
-        out_entry = entry.value;                    
+        sq_pop(vm, 2);
+        out_entry = entry.value;
         return 1;
     }
-            
+
     template <typename T>
-    SQInteger GetValue(int index, T& out_entry)
-    {
+    SQInteger GetValue(int index, T& out_entry) {
         HSQOBJECT value = GetObject();
-        sq_pushobject(vm, value);        
+        sq_pushobject(vm, value);
         sq_pushinteger(vm, index);
-        if (SQ_FAILED(sq_get(vm, -2)))
-        {
+        if (SQ_FAILED(sq_get(vm, -2))) {
             sq_pop(vm, 1);
-            return sq_throwerror(vm, _SC("illegal index"));       
+            return sq_throwerror(vm, _SC("illegal index"));
         }
-            
+
         Var<T> entry(vm, -1);
         if (Sqrat::Error::Instance().Occurred(vm)) {
-            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());                    
+            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
         }
-        sq_pop(vm, 2);  
-        out_entry = entry.value;                    
+        sq_pop(vm, 2);
+        out_entry = entry.value;
         return 1;
     }
 
@@ -179,13 +177,14 @@ public:
     }
 };
 
-class Table : public TableBase {
+class Table : public TableBase
+{
 public:
     Table(HSQUIRRELVM v = DefaultVM::Get()) : TableBase(v) {
         sq_newtable(vm);
-        sq_getstackobj(vm,-1,&obj);
+        sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
     }
     Table(const Object& obj) : TableBase(obj) {
     }
@@ -197,24 +196,26 @@ public:
 // Root Table
 //
 
-class RootTable : public TableBase {
+class RootTable : public TableBase
+{
 public:
     RootTable(HSQUIRRELVM v = DefaultVM::Get()) : TableBase(v) {
         sq_pushroottable(vm);
-        sq_getstackobj(vm,-1,&obj);
+        sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
-        sq_pop(v,1); // pop root table
+        sq_pop(v, 1); // pop root table
     }
-    
+
 };
 
-class RegistryTable : public TableBase {
+class RegistryTable : public TableBase
+{
 public:
     RegistryTable(HSQUIRRELVM v = DefaultVM::Get()) : TableBase(v) {
         sq_pushregistrytable(v);
-        sq_getstackobj(vm,-1,&obj);
+        sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
-        sq_pop(v,1); // pop the registry table
+        sq_pop(v, 1); // pop the registry table
     }
 };
 
@@ -224,7 +225,7 @@ struct Var<Table> {
     Var(HSQUIRRELVM vm, SQInteger idx) {
         HSQOBJECT obj;
         sq_resetobject(&obj);
-        sq_getstackobj(vm,idx,&obj);
+        sq_getstackobj(vm, idx, &obj);
         value = Table(obj, vm);
         SQObjectType value_type = sq_gettype(vm, idx);
         if (value_type != OT_TABLE) {
@@ -235,7 +236,7 @@ struct Var<Table> {
         HSQOBJECT obj;
         sq_resetobject(&obj);
         obj = value.GetObject();
-        sq_pushobject(vm,obj);
+        sq_pushobject(vm, obj);
     }
 };
 

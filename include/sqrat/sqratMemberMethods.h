@@ -32,18 +32,20 @@
 #include <squirrel.h>
 #include "sqratTypes.h"
 
-namespace Sqrat {
+namespace Sqrat
+{
 
 //
 // Squirrel Global Functions
 //
 
 template <class C, class R>
-class SqMember {
+class SqMember
+{
     static const SQChar STATICCALLERROR[] ;
 public:
     // Arg Count 0
-    template <bool overloaded /* = false */>
+    template < bool overloaded /* = false */ >
     static SQInteger Func0(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 2) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -56,14 +58,14 @@ public:
         C* ptr = ClassType<C>::GetInstance(vm, 1);
 
         if (ptr == NULL) return sq_throwerror(vm, STATICCALLERROR);
-        
+
         R ret = (ptr->*method)();
 
         PushVar(vm, ret);
         return 1;
     }
 
-    template <bool overloaded  /* = false */ >
+    template < bool overloaded  /* = false */ >
     static SQInteger Func0C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 2) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -84,7 +86,7 @@ public:
     }
 
     // Arg Count 1
-    template <class A1, bool overloaded /*= false*/ >
+    template < class A1, bool overloaded /*= false*/ >
     static SQInteger Func1(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 3) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -103,7 +105,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value
@@ -113,7 +115,7 @@ public:
         return 1;
     }
 
-    template <class A1, bool overloaded /*= false*/ >
+    template < class A1, bool overloaded /*= false*/ >
     static SQInteger Func1C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 3) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -132,7 +134,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value
@@ -143,7 +145,7 @@ public:
     }
 
     // Arg Count 2
-    template <class A1, class A2, bool overloaded /*= false*/ >
+    template < class A1, class A2, bool overloaded /*= false*/ >
     static SQInteger Func2(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 4) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -163,7 +165,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -174,7 +176,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, bool overloaded /*= false*/ >
+    template < class A1, class A2, bool overloaded /*= false*/ >
     static SQInteger Func2C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 4) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -194,7 +196,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -206,7 +208,7 @@ public:
     }
 
     // Arg Count 3
-    template <class A1, class A2, class A3, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, bool overloaded /*= false*/ >
     static SQInteger Func3(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 5) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -227,7 +229,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -239,7 +241,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, bool overloaded /*= false*/ >
     static SQInteger Func3C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 5) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -260,7 +262,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -273,7 +275,7 @@ public:
     }
 
     // Arg Count 4
-    template <class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
     static SQInteger Func4(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 6) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -295,7 +297,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -308,7 +310,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
     static SQInteger Func4C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 6) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -330,7 +332,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -344,7 +346,7 @@ public:
     }
 
     // Arg Count 5
-    template <class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
     static SQInteger Func5(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 7) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -367,7 +369,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -381,7 +383,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
     static SQInteger Func5C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 7) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -404,7 +406,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -419,7 +421,7 @@ public:
     }
 
     // Arg Count 6
-    template <class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
     static SQInteger Func6(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 8) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -443,7 +445,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -458,7 +460,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
     static SQInteger Func6C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 8) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -482,7 +484,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -498,7 +500,7 @@ public:
     }
 
     // Arg Count 7
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
     static SQInteger Func7(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 9) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -523,7 +525,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -539,7 +541,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
     static SQInteger Func7C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 9) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -564,7 +566,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -581,7 +583,7 @@ public:
     }
 
     // Arg Count 8
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
     static SQInteger Func8(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 10) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -607,7 +609,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -624,7 +626,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
     static SQInteger Func8C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 10) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -650,7 +652,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -668,7 +670,7 @@ public:
     }
 
     // Arg Count 9
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
     static SQInteger Func9(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 11) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -695,7 +697,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -713,7 +715,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
     static SQInteger Func9C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 11) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -740,7 +742,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -760,7 +762,7 @@ public:
 
 
     // Arg Count 10
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded /*= false*/ >
     static SQInteger Func10(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 12) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -788,7 +790,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -807,7 +809,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded  /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded  /*= false*/ >
     static SQInteger Func10C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 12) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -835,7 +837,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -856,7 +858,7 @@ public:
 
 
     // Arg Count 11
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/>
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/ >
     static SQInteger Func11(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 13) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -885,7 +887,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -905,7 +907,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/>  
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/ >
     static SQInteger Func11C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 13) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -934,7 +936,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -956,7 +958,7 @@ public:
 
 
     // Arg Count 12
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/  >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/  >
     static SQInteger Func12(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 14) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -986,7 +988,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -1007,7 +1009,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/ >
     static SQInteger Func12C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 14) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1037,7 +1039,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -1059,7 +1061,7 @@ public:
     }
 
     // Arg Count 13
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ >
     static SQInteger Func13(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 15) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1090,7 +1092,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -1112,7 +1114,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ > 
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ >
     static SQInteger Func13C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 15) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1143,7 +1145,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -1166,7 +1168,7 @@ public:
     }
 
     // Arg Count 14
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
     static SQInteger Func14(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 16) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1198,7 +1200,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -1221,7 +1223,7 @@ public:
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
     static SQInteger Func14C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 16) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1253,7 +1255,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R ret = (ptr->*method)(
                     a1.value,
@@ -1281,11 +1283,12 @@ public:
 // reference return specialization
 //
 template <class C, class R>
-class SqMember<C, R&> {
+class SqMember<C, R&>
+{
     static const SQChar STATICCALLERROR[] ;
 public:
     // Arg Count 0
-    template <bool overloaded /* = false */>
+    template < bool overloaded /* = false */ >
     static SQInteger Func0(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 2) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1298,14 +1301,14 @@ public:
         C* ptr = ClassType<C>::GetInstance(vm, 1);
 
         if (ptr == NULL) return sq_throwerror(vm, STATICCALLERROR);
-        
+
         R & ret = (ptr->*method)();
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <bool overloaded  /* = false */ >
+    template < bool overloaded  /* = false */ >
     static SQInteger Func0C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 2) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1326,7 +1329,7 @@ public:
     }
 
     // Arg Count 1
-    template <class A1, bool overloaded /*= false*/ >
+    template < class A1, bool overloaded /*= false*/ >
     static SQInteger Func1(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 3) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1345,17 +1348,17 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value
-                );
+                      a1.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, bool overloaded /*= false*/ >
+    template < class A1, bool overloaded /*= false*/ >
     static SQInteger Func1C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 3) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1374,18 +1377,18 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value
-                );
+                      a1.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 2
-    template <class A1, class A2, bool overloaded /*= false*/ >
+    template < class A1, class A2, bool overloaded /*= false*/ >
     static SQInteger Func2(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 4) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1405,18 +1408,18 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value
-                );
+                      a1.value,
+                      a2.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, bool overloaded /*= false*/ >
+    template < class A1, class A2, bool overloaded /*= false*/ >
     static SQInteger Func2C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 4) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1436,19 +1439,19 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value
-                );
+                      a1.value,
+                      a2.value
+                  );
 
         PushVarR (vm, ret);
         return 1;
     }
 
     // Arg Count 3
-    template <class A1, class A2, class A3, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, bool overloaded /*= false*/ >
     static SQInteger Func3(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 5) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1469,19 +1472,19 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, bool overloaded /*= false*/ >
     static SQInteger Func3C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 5) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1502,20 +1505,20 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 4
-    template <class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
     static SQInteger Func4(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 6) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1537,20 +1540,20 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
     static SQInteger Func4C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 6) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1572,21 +1575,21 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 5
-    template <class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
     static SQInteger Func5(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 7) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1609,21 +1612,21 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
     static SQInteger Func5C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 7) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1646,22 +1649,22 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 6
-    template <class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
     static SQInteger Func6(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 8) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1685,22 +1688,22 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
     static SQInteger Func6C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 8) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1724,23 +1727,23 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 7
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
     static SQInteger Func7(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 9) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1765,23 +1768,23 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
     static SQInteger Func7C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 9) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1806,24 +1809,24 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 8
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
     static SQInteger Func8(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 10) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1849,24 +1852,24 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
     static SQInteger Func8C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 10) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1892,25 +1895,25 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 9
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
     static SQInteger Func9(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 11) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1937,25 +1940,25 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
     static SQInteger Func9C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 11) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -1982,19 +1985,19 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
@@ -2002,7 +2005,7 @@ public:
 
 
     // Arg Count 10
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded /*= false*/ >
     static SQInteger Func10(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 12) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2030,26 +2033,26 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded  /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded  /*= false*/ >
     static SQInteger Func10C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 12) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2077,20 +2080,20 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
@@ -2098,7 +2101,7 @@ public:
 
 
     // Arg Count 11
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/>
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/ >
     static SQInteger Func11(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 13) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2127,27 +2130,27 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value,
-                    a11.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value,
+                      a11.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/>  
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/ >
     static SQInteger Func11C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 13) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2176,21 +2179,21 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value,
-                    a11.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value,
+                      a11.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
@@ -2198,7 +2201,7 @@ public:
 
 
     // Arg Count 12
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/  >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/  >
     static SQInteger Func12(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 14) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2228,28 +2231,28 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value,
-                    a11.value,
-                    a12.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value,
+                      a11.value,
+                      a12.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/ >
     static SQInteger Func12C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 14) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2279,29 +2282,29 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value,
-                    a11.value,
-                    a12.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value,
+                      a11.value,
+                      a12.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 13
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ >
     static SQInteger Func13(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 15) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2332,29 +2335,29 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value,
-                    a11.value,
-                    a12.value,
-                    a13.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value,
+                      a11.value,
+                      a12.value,
+                      a13.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ > 
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ >
     static SQInteger Func13C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 15) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2385,30 +2388,30 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value,
-                    a11.value,
-                    a12.value,
-                    a13.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value,
+                      a11.value,
+                      a12.value,
+                      a13.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
     // Arg Count 14
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
     static SQInteger Func14(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 16) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2440,30 +2443,30 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value,
-                    a11.value,
-                    a12.value,
-                    a13.value,
-                    a14.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value,
+                      a11.value,
+                      a12.value,
+                      a13.value,
+                      a14.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
     static SQInteger Func14C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 16) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2495,40 +2498,41 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         R & ret = (ptr->*method)(
-                    a1.value,
-                    a2.value,
-                    a3.value,
-                    a4.value,
-                    a5.value,
-                    a6.value,
-                    a7.value,
-                    a8.value,
-                    a9.value,
-                    a10.value,
-                    a11.value,
-                    a12.value,
-                    a13.value,
-                    a14.value
-                );
+                      a1.value,
+                      a2.value,
+                      a3.value,
+                      a4.value,
+                      a5.value,
+                      a6.value,
+                      a7.value,
+                      a8.value,
+                      a9.value,
+                      a10.value,
+                      a11.value,
+                      a12.value,
+                      a13.value,
+                      a14.value
+                  );
 
         PushVarR(vm, ret);
         return 1;
     }
-    
-}; 
+
+};
 
 //
 // void return specialization
 //
 
 template <class C>
-class SqMember<C, void> {
+class SqMember<C, void>
+{
 public:
     // Arg Count 0
-    template <bool overloaded  /* = false */ >
+    template < bool overloaded  /* = false */ >
     static SQInteger Func0(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 2) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2544,7 +2548,7 @@ public:
         return 0;
     }
 
-    template <bool overloaded  /* = false */ >
+    template < bool overloaded  /* = false */ >
     static SQInteger Func0C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 2) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2561,7 +2565,7 @@ public:
     }
 
     // Arg Count 1
-    template <class A1, bool overloaded /*= false*/>
+    template < class A1, bool overloaded /*= false*/ >
     static SQInteger Func1(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 3) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2578,7 +2582,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value
@@ -2586,7 +2590,7 @@ public:
         return 0;
     }
 
-    template <class A1, bool overloaded /*= false*/ >
+    template < class A1, bool overloaded /*= false*/ >
     static SQInteger Func1C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 3) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2603,7 +2607,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value
@@ -2612,7 +2616,7 @@ public:
     }
 
     // Arg Count 2
-    template <class A1, class A2, bool overloaded /*= false*/>
+    template < class A1, class A2, bool overloaded /*= false*/ >
     static SQInteger Func2(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 4) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2630,7 +2634,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2639,7 +2643,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, bool overloaded /*= false*/>
+    template < class A1, class A2, bool overloaded /*= false*/ >
     static SQInteger Func2C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 4) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2657,7 +2661,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2667,7 +2671,7 @@ public:
     }
 
     // Arg Count 3
-    template <class A1, class A2, class A3, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, bool overloaded /*= false*/ >
     static SQInteger Func3(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 5) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2686,7 +2690,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2696,7 +2700,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, bool overloaded /*= false*/ >
     static SQInteger Func3C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 5) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2715,7 +2719,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2726,7 +2730,7 @@ public:
     }
 
     // Arg Count 4
-    template <class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
     static SQInteger Func4(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 6) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2746,7 +2750,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2757,7 +2761,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, bool overloaded /*= false*/ >
     static SQInteger Func4C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 6) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2777,7 +2781,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2789,7 +2793,7 @@ public:
     }
 
     // Arg Count 5
-    template <class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
     static SQInteger Func5(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 7) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2810,7 +2814,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2822,7 +2826,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, bool overloaded /*= false*/ >
     static SQInteger Func5C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 7) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2843,7 +2847,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2856,7 +2860,7 @@ public:
     }
 
     // Arg Count 6
-    template <class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
     static SQInteger Func6(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 8) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2878,7 +2882,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2891,7 +2895,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, bool overloaded /*= false*/ >
     static SQInteger Func6C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 8) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2913,7 +2917,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2927,7 +2931,7 @@ public:
     }
 
     // Arg Count 7
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
     static SQInteger Func7(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 9) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2950,7 +2954,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -2964,7 +2968,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, bool overloaded /*= false*/ >
     static SQInteger Func7C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 9) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -2987,7 +2991,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3002,7 +3006,7 @@ public:
     }
 
     // Arg Count 8
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
     static SQInteger Func8(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 10) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3026,7 +3030,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3041,7 +3045,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ > 
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, bool overloaded /*= false*/ >
     static SQInteger Func8C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 10) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3065,7 +3069,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3081,7 +3085,7 @@ public:
     }
 
     // Arg Count 9
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
     static SQInteger Func9(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 11) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3106,7 +3110,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3122,7 +3126,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, bool overloaded /*= false*/ >
     static SQInteger Func9C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 11) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3147,7 +3151,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3164,7 +3168,7 @@ public:
     }
 
     // Arg Count 10
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded /*= false*/ >
     static SQInteger Func10(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 12) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3190,7 +3194,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3207,7 +3211,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, bool overloaded /*= false*/ >
     static SQInteger Func10C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 12) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3233,7 +3237,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3251,7 +3255,7 @@ public:
     }
 
     // Arg Count 11
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/ >
     static SQInteger Func11(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 13) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3278,7 +3282,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3296,7 +3300,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, bool overloaded /*= false*/ >
     static SQInteger Func11C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 13) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3323,7 +3327,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3342,7 +3346,7 @@ public:
     }
 
     // Arg Count 12
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/ >
     static SQInteger Func12(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 14) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3370,7 +3374,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3389,7 +3393,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, bool overloaded /*= false*/ >
     static SQInteger Func12C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 14) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3417,7 +3421,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3437,7 +3441,7 @@ public:
     }
 
     // Arg Count 13
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/>
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ >
     static SQInteger Func13(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 15) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3466,7 +3470,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3486,7 +3490,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/>
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, bool overloaded /*= false*/ >
     static SQInteger Func13C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 15) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3515,7 +3519,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3536,7 +3540,7 @@ public:
     }
 
     // Arg Count 14
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
     static SQInteger Func14(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 16) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3566,7 +3570,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3587,7 +3591,7 @@ public:
         return 0;
     }
 
-    template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >  
+    template < class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, bool overloaded /*= false*/ >
     static SQInteger Func14C(HSQUIRRELVM vm) {
         if (!overloaded && sq_gettop(vm) != 16) {
             return sq_throwerror(vm, _SC("wrong number of parameters"));
@@ -3617,7 +3621,7 @@ public:
             if (overloaded)
                 return 0;
             else
-            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         (ptr->*method)(
             a1.value,
@@ -3647,316 +3651,376 @@ public:
 
 // Arg Count 0
 template <class C, class R>
-inline SQFUNCTION SqMemberFunc(R (C::*method)()) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)())
+{
     return &SqMember<C, R>::template Func0<false>;
 }
 
 template <class C, class R>
-inline SQFUNCTION SqMemberFunc(R (C::*method)() const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)() const)
+{
     return &SqMember<C, R>::template Func0C<false>;
 }
 
 template <class C, class R>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)()) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)())
+{
     return &SqMember<C, R& >::template Func0<false>;
 }
 
 template <class C, class R>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)() const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)() const)
+{
     return &SqMember<C, R& >::template Func0C<false>;
 }
 
 
 // Arg Count 1
 template <class C, class R, class A1>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1))
+{
     return &SqMember<C, R>::template Func1<A1, false>;
 }
 
 template <class C, class R, class A1>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1) const)
+{
     return &SqMember<C, R>::template Func1C<A1, false>;
 }
 
 template <class C, class R, class A1>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1))
+{
     return &SqMember<C, R& >::template Func1<A1, false>;
 }
 
 template <class C, class R, class A1>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1) const)
+{
     return &SqMember<C, R& >::template Func1C<A1, false>;
 }
 
 
 // Arg Count 2
 template <class C, class R, class A1, class A2>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2))
+{
     return &SqMember<C, R>::template Func2<A1, A2, false>;
 }
 
 template <class C, class R, class A1, class A2>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2) const)
+{
     return &SqMember<C, R>::template Func2C<A1, A2, false>;
 }
 
 template <class C, class R, class A1, class A2>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2))
+{
     return &SqMember<C, R& >::template Func2<A1, A2, false>;
 }
 
 template <class C, class R, class A1, class A2>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2) const)
+{
     return &SqMember<C, R&>::template Func2C<A1, A2, false>;
 }
 
 // Arg Count 3
 template <class C, class R, class A1, class A2, class A3>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3))
+{
     return &SqMember<C, R>::template Func3<A1, A2, A3, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3) const)
+{
     return &SqMember<C, R>::template Func3C<A1, A2, A3, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3))
+{
     return &SqMember<C, R& >::template Func3<A1, A2, A3, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3) const)
+{
     return &SqMember<C, R& >::template Func3C<A1, A2, A3, false>;
 }
 
 // Arg Count 4
 template <class C, class R, class A1, class A2, class A3, class A4>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4))
+{
     return &SqMember<C, R>::template Func4<A1, A2, A3, A4, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4) const)
+{
     return &SqMember<C, R>::template Func4C<A1, A2, A3, A4, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4))
+{
     return &SqMember<C, R& >::template Func4<A1, A2, A3, A4, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4) const)
+{
     return &SqMember<C, R&>::template Func4C<A1, A2, A3, A4, false>;
 }
 
 // Arg Count 5
 template <class C, class R, class A1, class A2, class A3, class A4, class A5>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5))
+{
     return &SqMember<C, R>::template Func5<A1, A2, A3, A4, A5, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5) const)
+{
     return &SqMember<C, R>::template Func5C<A1, A2, A3, A4, A5, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5))
+{
     return &SqMember<C, R& >::template Func5<A1, A2, A3, A4, A5, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5>
-inline SQFUNCTION SqMemberFunc(R &(C::*method)(A1, A2, A3, A4, A5) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5) const)
+{
     return &SqMember<C, R& >::template Func5C<A1, A2, A3, A4, A5, false>;
 }
 
 // Arg Count 6
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6))
+{
     return &SqMember<C, R>::template Func6<A1, A2, A3, A4, A5, A6, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6) const)
+{
     return &SqMember<C, R>::template Func6C<A1, A2, A3, A4, A5, A6, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6))
+{
     return &SqMember<C, R& >::template Func6<A1, A2, A3, A4, A5, A6, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6) const)
+{
     return &SqMember<C, R& >::template Func6C<A1, A2, A3, A4, A5, A6, false>;
 }
 
 // Arg Count 7
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7))
+{
     return &SqMember<C, R>::template Func7<A1, A2, A3, A4, A5, A6, A7, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7) const)
+{
     return &SqMember<C, R>::template Func7C<A1, A2, A3, A4, A5, A6, A7, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7))
+{
     return &SqMember<C, R& >::template Func7<A1, A2, A3, A4, A5, A6, A7, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7) const)
+{
     return &SqMember<C, R& >::template Func7C<A1, A2, A3, A4, A5, A6, A7, false>;
 }
 
 // Arg Count 8
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8))
+{
     return &SqMember<C, R>::template Func8<A1, A2, A3, A4, A5, A6, A7, A8, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8) const)
+{
     return &SqMember<C, R>::template Func8C<A1, A2, A3, A4, A5, A6, A7, A8, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8))
+{
     return &SqMember<C, R& >::template Func8<A1, A2, A3, A4, A5, A6, A7, A8, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8) const)
+{
     return &SqMember<C, R& >::template Func8C<A1, A2, A3, A4, A5, A6, A7, A8, false>;
 }
 
 // Arg Count 9
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9))
+{
     return &SqMember<C, R>::template Func9<A1, A2, A3, A4, A5, A6, A7, A8, A9, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9) const)
+{
     return &SqMember<C, R>::template Func9C<A1, A2, A3, A4, A5, A6, A7, A8, A9, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-inline SQFUNCTION SqMemberFunc(R &(C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9))
+{
     return &SqMember<C, R& >::template Func9<A1, A2, A3, A4, A5, A6, A7, A8, A9, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9) const)
+{
     return &SqMember<C, R& >::template Func9C<A1, A2, A3, A4, A5, A6, A7, A8, A9, false>;
 }
 
 // Arg Count 10
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10))
+{
     return &SqMember<C, R>::template Func10<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const)
+{
     return &SqMember<C, R>::template Func10C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, false>;
 }
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10))
+{
     return &SqMember<C, R& >::template Func10<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const)
+{
     return &SqMember<C, R& >::template Func10C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, false>;
 }
 
 // Arg Count 11
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11))
+{
     return &SqMember<C, R>::template Func11<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const)
+{
     return &SqMember<C, R>::template Func11C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, false>;
 }
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11))
+{
     return &SqMember<C, R& >::template Func11<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const)
+{
     return &SqMember<C, R& >::template Func11C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, false>;
 }
 
 // Arg Count 12
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12))
+{
     return &SqMember<C, R>::template Func12<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const)
+{
     return &SqMember<C, R>::template Func12C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12))
+{
     return &SqMember<C, R& >::template Func12<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const)
+{
     return &SqMember<C, R& >::template Func12C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, false>;
 }
 
 // Arg Count 13
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13))
+{
     return &SqMember<C, R>::template Func13<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const)
+{
     return &SqMember<C, R>::template Func13C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13))
+{
     return &SqMember<C, R & >::template Func13<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const)
+{
     return &SqMember<C, R & >::template Func13C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, false>;
 }
 
 // Arg Count 14
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14))
+{
     return &SqMember<C, R>::template Func14<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const) {
+inline SQFUNCTION SqMemberFunc(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const)
+{
     return &SqMember<C, R>::template Func14C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14))
+{
     return &SqMember<C, R& >::template Func14<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, false>;
 }
 
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
-inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const) {
+inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const)
+{
     return &SqMember<C, R& >::template Func14C<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, false>;
 }
 
@@ -3966,7 +4030,8 @@ inline SQFUNCTION SqMemberFunc(R & (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, 
 //
 
 template <class C, class V>
-inline SQInteger sqDefaultGet(HSQUIRRELVM vm) {
+inline SQInteger sqDefaultGet(HSQUIRRELVM vm)
+{
     C* ptr = ClassType<C>::GetInstance(vm, 1);
 
     typedef V C::*M;
@@ -3981,7 +4046,8 @@ inline SQInteger sqDefaultGet(HSQUIRRELVM vm) {
 
 
 template <class C, class V>
-inline SQInteger sqStaticGet(HSQUIRRELVM vm) {
+inline SQInteger sqStaticGet(HSQUIRRELVM vm)
+{
     typedef V *M;
     M* memberPtr = NULL;
     sq_getuserdata(vm, -1, (SQUserPointer*)&memberPtr, NULL); // Get Member...
@@ -3993,16 +4059,17 @@ inline SQInteger sqStaticGet(HSQUIRRELVM vm) {
 }
 
 
-inline SQInteger sqVarGet(HSQUIRRELVM vm) {
+inline SQInteger sqVarGet(HSQUIRRELVM vm)
+{
     // Find the get method in the get table
     sq_push(vm, 2);
-    if (SQ_FAILED( sq_get(vm,-2) )) {
+    if (SQ_FAILED( sq_get(vm, -2) )) {
 #if (SQUIRREL_VERSION_NUMBER >= 200) && (SQUIRREL_VERSION_NUMBER < 300) // Squirrel 2.x
-        return sq_throwerror(vm,_SC("Member Variable not found"));
+        return sq_throwerror(vm, _SC("Member Variable not found"));
 #else // Squirrel 3.x
         sq_pushnull(vm);
         return sq_throwobject(vm);
-#endif        
+#endif
     }
 
     // push 'this'
@@ -4020,7 +4087,8 @@ inline SQInteger sqVarGet(HSQUIRRELVM vm) {
 //
 
 template <class C, class V>
-inline SQInteger sqDefaultSet(HSQUIRRELVM vm) {
+inline SQInteger sqDefaultSet(HSQUIRRELVM vm)
+{
     C* ptr = ClassType<C>::GetInstance(vm, 1);
 
     typedef V C::*M;
@@ -4033,7 +4101,8 @@ inline SQInteger sqDefaultSet(HSQUIRRELVM vm) {
 }
 
 template <class C, class V>
-inline SQInteger sqStaticSet(HSQUIRRELVM vm) {
+inline SQInteger sqStaticSet(HSQUIRRELVM vm)
+{
     typedef V *M;
     M* memberPtr = NULL;
     sq_getuserdata(vm, -1, (SQUserPointer*)&memberPtr, NULL); // Get Member...
@@ -4043,16 +4112,17 @@ inline SQInteger sqStaticSet(HSQUIRRELVM vm) {
     return 0;
 }
 
-inline SQInteger sqVarSet(HSQUIRRELVM vm) {
+inline SQInteger sqVarSet(HSQUIRRELVM vm)
+{
     // Find the set method in the set table
     sq_push(vm, 2);
-    if (SQ_FAILED( sq_get(vm,-2) )) {
+    if (SQ_FAILED( sq_get(vm, -2) )) {
 #if (SQUIRREL_VERSION_NUMBER >= 200) && (SQUIRREL_VERSION_NUMBER < 300) // Squirrel 2.x
-        return sq_throwerror(vm,_SC("Member Variable not found"));
+        return sq_throwerror(vm, _SC("Member Variable not found"));
 #else // Squirrel 3.x
         sq_pushnull(vm);
         return sq_throwobject(vm);
-#endif        
+#endif
     }
 
     // push 'this'

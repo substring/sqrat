@@ -32,36 +32,31 @@ class Vector2
 {
 public:
     float value;
-    
+
     //some Vector Math overloads and members here
-    operator float() const 
-    {
-        return 1.0f; /* test only */    
+    operator float() const {
+        return 1.0f; /* test only */
     }
-    
-    
-    Vector2 operator +(const Vector2& v) 
-    {
+
+
+    Vector2 operator +(const Vector2& v) {
         value += v.value;
-        return v; /* test only */    
+        return v; /* test only */
     }
-    
-    inline float add(const Vector2& v) 
-    {
+
+    inline float add(const Vector2& v) {
         return (*this) + v; //it crashes right here as it references to an nonexistent obj
     }
 
-    
-    bool boolFunc() 
-    {
+
+    bool boolFunc() {
         return true;
     }
-    
-    bool boolFunc2() 
-    {
+
+    bool boolFunc2() {
         return false;
     }
-    
+
 };
 
 static const SQChar *sq_code = _SC("\
@@ -123,17 +118,18 @@ static const SQChar *sq_code = _SC("\
 
 
 
-TEST_F(SqratTest, NumericArgumentTypeConversionAndCheck) {
+TEST_F(SqratTest, NumericArgumentTypeConversionAndCheck)
+{
     DefaultVM::Set(vm);
-    
+
     Sqrat::Class<Vector2> classVector2(vm);
-    
+
     classVector2.Func(_SC("add"), &Vector2::add);
-    
+
     classVector2.Func(_SC("boolFunc"), &Vector2::boolFunc);
     classVector2.Func(_SC("boolFunc2"), &Vector2::boolFunc2);
     Sqrat::RootTable(vm).Bind(_SC("Vector2"), classVector2);
-            
+
     Script script;
     try {
         script.CompileString(sq_code);
@@ -152,16 +148,14 @@ TEST_F(SqratTest, NumericArgumentTypeConversionAndCheck) {
 class F
 {
 public:
-    int func(int i, char j)
-    {
+    int func(int i, char j) {
         return 1;
     }
-    
-    const char * func(char c, const char *s)
-    {
+
+    const char * func(char c, const char *s) {
         return s;
     }
-    
+
 };
 
 static const char *sq_code2 = _SC("\
@@ -172,15 +166,16 @@ static const char *sq_code2 = _SC("\
 
 
 
-TEST_F(SqratTest, FunctionOfSameNumberOfArgumentsButDifferentTypesBinding) {
+TEST_F(SqratTest, FunctionOfSameNumberOfArgumentsButDifferentTypesBinding)
+{
     DefaultVM::Set(vm);
-    
+
     Sqrat::Class<F> Fclass(vm);
     Fclass.Func<int (F::*)(int, char)>(_SC("f1"), &F::func);
     Fclass.Func<const char * (F::*)(char, const char*)>(_SC("f2"), &F::func);
-    
+
     Sqrat::RootTable(vm).Bind(_SC("F"), Fclass);
-            
+
     Script script;
     try {
         script.CompileString(sq_code2);

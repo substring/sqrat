@@ -27,10 +27,10 @@
 #include <sqrat/sqratVM.h>
 #include "Fixture.h"
 /* test demonstrating Sourceforge bug 3507590 */
-   
+
 using namespace Sqrat;
 
-class simpleclass 
+class simpleclass
 {
 public:
     simpleclass() {}
@@ -40,9 +40,9 @@ public:
 void bind(HSQUIRRELVM vm)
 {
     Sqrat::Class<simpleclass> sqClass(vm);
-    sqClass               
+    sqClass
     .Func(_SC("memfun"), &simpleclass::memfun);
-    Sqrat::RootTable(vm).Bind(_SC("simpleclass"), sqClass);    
+    Sqrat::RootTable(vm).Bind(_SC("simpleclass"), sqClass);
 
 }
 
@@ -50,8 +50,8 @@ TEST_F(SqratTest, SqratVM)
 {
     SqratVM vm1;
     SqratVM vm2;
-    
+
     bind(vm1.getVM());
     bind(vm2.getVM());
-    
+
 }

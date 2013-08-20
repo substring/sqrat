@@ -48,7 +48,8 @@ static HSQAPI sqapi = NULL;
 
 // Create and populate the HSQAPI structure with function pointers
 // If new functions are added to the Squirrel API, they should be added here too
-static HSQAPI sqrat_newapi() {
+static HSQAPI sqrat_newapi()
+{
     HSQAPI sq = (HSQAPI)sq_malloc(sizeof(sq_api));
 
     /*vm*/
@@ -192,7 +193,8 @@ static HSQAPI sqrat_newapi() {
 }
 
 
-static SQRESULT sqrat_importscript(HSQUIRRELVM v, const SQChar* moduleName) {
+static SQRESULT sqrat_importscript(HSQUIRRELVM v, const SQChar* moduleName)
+{
     std::basic_string<SQChar> filename(moduleName);
     filename += _SC(".nut");
     if(SQ_FAILED(sqstd_loadfile(v, moduleName, true))) {
@@ -205,7 +207,8 @@ static SQRESULT sqrat_importscript(HSQUIRRELVM v, const SQChar* moduleName) {
     return SQ_OK;
 }
 
-static SQRESULT sqrat_importbin(HSQUIRRELVM v, const SQChar* moduleName) {
+static SQRESULT sqrat_importbin(HSQUIRRELVM v, const SQChar* moduleName)
+{
 #ifdef SQUNICODE
 #warning sqrat_importbin() Not Implemented
     return SQ_ERROR;
@@ -252,7 +255,8 @@ static SQRESULT sqrat_importbin(HSQUIRRELVM v, const SQChar* moduleName) {
 #endif
 }
 
-SQRESULT sqrat_import(HSQUIRRELVM v) {
+SQRESULT sqrat_import(HSQUIRRELVM v)
+{
     const SQChar* moduleName;
     HSQOBJECT table;
     SQRESULT res = SQ_OK;
@@ -272,22 +276,23 @@ SQRESULT sqrat_import(HSQUIRRELVM v) {
     sq_settop(v, 0); // Clean up the stack (just in case the module load leaves it messy)
     sq_pushobject(v, table); // return the target table
     sq_release(v, &table);
-    
+
     return res;
 }
 
-static SQInteger sqratbase_import(HSQUIRRELVM v) {
+static SQInteger sqratbase_import(HSQUIRRELVM v)
+{
     SQInteger args = sq_gettop(v);
     switch(args) {
-    case 2:
-        sq_pushroottable(v);
-        break;
-    case 3:
-        // should already have the desired table pushed onto the stack
-        break;
-    default:
-        // Error, unexpected number of arguments
-        break;
+        case 2:
+            sq_pushroottable(v);
+            break;
+        case 3:
+            // should already have the desired table pushed onto the stack
+            break;
+        default:
+            // Error, unexpected number of arguments
+            break;
     }
 
     sqrat_import(v);
@@ -295,7 +300,8 @@ static SQInteger sqratbase_import(HSQUIRRELVM v) {
     return 1;
 }
 
-SQRESULT sqrat_register_importlib(HSQUIRRELVM v) {
+SQRESULT sqrat_register_importlib(HSQUIRRELVM v)
+{
     sq_pushroottable(v);
 
     sq_pushstring(v, _SC("import"), -1);

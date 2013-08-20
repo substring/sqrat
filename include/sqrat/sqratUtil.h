@@ -32,13 +32,14 @@
 #include <string.h>
 
 
-namespace Sqrat {
+namespace Sqrat
+{
 
 typedef std::basic_string<SQChar> string;
 
 #ifdef SQUNICODE
 
-/* from http://stackoverflow.com/questions/15333259/c-stdwstring-to-stdstring-quick-and-dirty-conversion-for-use-as-key-in, 
+/* from http://stackoverflow.com/questions/15333259/c-stdwstring-to-stdstring-quick-and-dirty-conversion-for-use-as-key-in,
    only works for ASCII chars */
 /**
 * Convert a std::string into a std::wstring
@@ -61,7 +62,8 @@ static std::string (*wstring_to_string)(const std::wstring& wstr) = ascii_wstrin
 #endif // SQUNICODE
 
 
-class DefaultVM {
+class DefaultVM
+{
 private:
     static HSQUIRRELVM& staticVm() {
         static HSQUIRRELVM vm;
@@ -76,7 +78,8 @@ public:
     }
 };
 
-class ErrorHandling {
+class ErrorHandling
+{
 private:
     static bool& errorHandling() {
         static bool eh = true;
@@ -91,7 +94,8 @@ public:
     }
 };
 
-class Exception {
+class Exception
+{
 public:
     Exception(const string& msg) : message(msg) {}
     Exception(const Exception& ex) : message(ex.message) {}
@@ -104,7 +108,8 @@ private:
     string message;
 };
 
-inline string LastErrorString( HSQUIRRELVM vm ) {
+inline string LastErrorString( HSQUIRRELVM vm )
+{
     const SQChar* sqErr;
     sq_getlasterror(vm);
     if(sq_gettype(vm, -1) == OT_NULL) {
@@ -114,7 +119,8 @@ inline string LastErrorString( HSQUIRRELVM vm ) {
     sq_getstring(vm, -1, &sqErr);
     return string(sqErr);
 }
-class Error {
+class Error
+{
 public:
     static Error& Instance() {
         static Error instance;

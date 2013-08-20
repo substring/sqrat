@@ -27,7 +27,8 @@
 
 using namespace Sqrat;
 
-TEST_F(SqratTest, ConstBindings) {
+TEST_F(SqratTest, ConstBindings)
+{
     DefaultVM::Set(vm);
 
     ConstTable(vm).Enum(_SC("Color"), Enumeration(vm)

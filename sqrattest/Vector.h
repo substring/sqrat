@@ -26,9 +26,11 @@
 
 #include <sqrat.h>
 
-namespace Sqrat {
+namespace Sqrat
+{
 // A simple Vector class used to demonstrate binding
-class Vec2 {
+class Vec2
+{
 public:
     float x, y;
 

@@ -27,7 +27,8 @@
 
 using namespace Sqrat;
 
-TEST_F(SqratTest, CallSquirrelFunction) {
+TEST_F(SqratTest, CallSquirrelFunction)
+{
     DefaultVM::Set(vm);
 
     Script script;
@@ -66,27 +67,29 @@ TEST_F(SqratTest, CallSquirrelFunction) {
     Function multiplyTwo = RootTable().GetFunction(_SC("MultiplyTwo"));
     ASSERT_FALSE(multiplyTwo.IsNull());
     EXPECT_EQ(multiplyTwo.Evaluate<int>(2, 3), 6);
-    
+
     Function returnTrue = RootTable().GetFunction(_SC("returnTrue"));
     ASSERT_FALSE(returnTrue.IsNull());
     ASSERT_TRUE(returnTrue.Evaluate<bool>());
-    ASSERT_TRUE(returnTrue.Evaluate<SQBool>()); 
- 
+    ASSERT_TRUE(returnTrue.Evaluate<SQBool>());
+
     Function returnFalse = RootTable().GetFunction(_SC("returnFalse"));
     ASSERT_FALSE(returnFalse.IsNull());
     ASSERT_FALSE(returnFalse.Evaluate<bool>());
-    ASSERT_FALSE(returnFalse.Evaluate<SQBool>());  
- 
+    ASSERT_FALSE(returnFalse.Evaluate<SQBool>());
+
 }
 
-int NativeOp(int a, int b, Function opFunc) {
+int NativeOp(int a, int b, Function opFunc)
+{
     if(opFunc.IsNull()) {
         return -1;
     }
     return opFunc.Evaluate<int>(a, b);
 }
 
-TEST_F(SqratTest, FunctionAsArgument) {
+TEST_F(SqratTest, FunctionAsArgument)
+{
     DefaultVM::Set(vm);
 
     RootTable().Func(_SC("NativeOp"), &NativeOp);

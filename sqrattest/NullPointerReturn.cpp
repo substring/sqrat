@@ -29,11 +29,11 @@
 using namespace Sqrat;
 
 
-class Entity 
+class Entity
 {
 public:
     Entity *FindEntity() { return NULL ; }
-    
+
 };
 
 
@@ -46,13 +46,14 @@ static const SQChar *sq_code = _SC("\
 
 
 
-TEST_F(SqratTest, NullPointerReturn) {
+TEST_F(SqratTest, NullPointerReturn)
+{
     DefaultVM::Set(vm);
-    
+
     Class<Entity> entity;
     entity.Func(_SC("FindEntity"), &Entity::FindEntity);
     RootTable().Bind(_SC("Entity"), entity);
-        
+
     Script script;
     try {
         script.CompileString(sq_code);

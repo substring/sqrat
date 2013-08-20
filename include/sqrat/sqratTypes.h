@@ -39,98 +39,92 @@
 #include "sqratClassType.h"
 #include "sqratUtil.h"
 
-namespace Sqrat {
+namespace Sqrat
+{
 
-    // copied from http://www.experts-exchange.com/Programming/Languages/CPP/A_223-Determing-if-a-C-type-is-convertable-to-another-at-compile-time.html
+// copied from http://www.experts-exchange.com/Programming/Languages/CPP/A_223-Determing-if-a-C-type-is-convertable-to-another-at-compile-time.html
 template <typename T1, typename T2>
-struct is_convertible
-{
+struct is_convertible {
 private:
-	struct True_ { char x[2]; };
-	struct False_ { };
- 
-	static True_ helper(T2 const &);
-	static False_ helper(...);
-	
-	static T1* dummy;
- 
+    struct True_ { char x[2]; };
+    struct False_ { };
+
+    static True_ helper(T2 const &);
+    static False_ helper(...);
+
+    static T1* dummy;
+
 public:
-	static bool const YES = (
-		sizeof(True_) == sizeof(is_convertible::helper(*dummy))
-	);
-}; 
-    
-// integer value utility, T must be integral type
-template <typename T, bool b>
-struct popAsInt
-{
-    T value;
-    popAsInt(HSQUIRRELVM vm, SQInteger idx) 
-    {
-        SQObjectType value_type = sq_gettype(vm, idx); 
-        switch(value_type) {
-        case OT_BOOL:
-            SQBool sqValueb; 
-            sq_getbool(vm, idx, &sqValueb); 
-            value = static_cast<T>(sqValueb); 
-            break; 
-        case OT_INTEGER: 
-            SQInteger sqValue; 
-            sq_getinteger(vm, idx, &sqValue); 
-            value = static_cast<T>(sqValue); 
-            break;
-        case OT_FLOAT:
-            SQFloat sqValuef; 
-            sq_getfloat(vm, idx, &sqValuef); 
-            value = static_cast<T>(sqValuef); 
-            break;
-        default:
-            Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("integer"))); 
-            value = static_cast<T>(0); 
-            break; 
-        }
-    }   
+    static bool const YES = (
+                                sizeof(True_) == sizeof(is_convertible::helper(*dummy))
+                            );
 };
 
-template <typename T>
-struct popAsInt<T, false>
-{
-    T value;  // cannot be initialized because unknown constructor parameters
-    popAsInt(HSQUIRRELVM vm, SQInteger idx) 
-    {
-        // keep the current error message already set previously, do not touch that here    
+// integer value utility, T must be integral type
+template <typename T, bool b>
+struct popAsInt {
+    T value;
+    popAsInt(HSQUIRRELVM vm, SQInteger idx) {
+        SQObjectType value_type = sq_gettype(vm, idx);
+        switch(value_type) {
+            case OT_BOOL:
+                SQBool sqValueb;
+                sq_getbool(vm, idx, &sqValueb);
+                value = static_cast<T>(sqValueb);
+                break;
+            case OT_INTEGER:
+                SQInteger sqValue;
+                sq_getinteger(vm, idx, &sqValue);
+                value = static_cast<T>(sqValue);
+                break;
+            case OT_FLOAT:
+                SQFloat sqValuef;
+                sq_getfloat(vm, idx, &sqValuef);
+                value = static_cast<T>(sqValuef);
+                break;
+            default:
+                Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("integer")));
+                value = static_cast<T>(0);
+                break;
+        }
     }
 };
 
 template <typename T>
-struct popAsFloat
-{
+struct popAsInt<T, false> {
+    T value;  // cannot be initialized because unknown constructor parameters
+    popAsInt(HSQUIRRELVM vm, SQInteger idx) {
+        // keep the current error message already set previously, do not touch that here
+    }
+};
+
+template <typename T>
+struct popAsFloat {
     T value;
-    popAsFloat(HSQUIRRELVM vm, SQInteger idx) 
-    {
-        SQObjectType value_type = sq_gettype(vm, idx); 
+    popAsFloat(HSQUIRRELVM vm, SQInteger idx) {
+        SQObjectType value_type = sq_gettype(vm, idx);
         switch(value_type) {
-        case OT_BOOL:
-            SQBool sqValueb; 
-            sq_getbool(vm, idx, &sqValueb); 
-            value = static_cast<T>(sqValueb); 
-            break; 
-        case OT_INTEGER: 
-            SQInteger sqValue; \
-            sq_getinteger(vm, idx, &sqValue); 
-            value = static_cast<T>(sqValue); 
-            break;
-        case OT_FLOAT:
-            SQFloat sqValuef; 
-            sq_getfloat(vm, idx, &sqValuef); 
-            value = static_cast<T>(sqValuef); 
-            break;
-        default:
-            Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("float"))); 
-            value = 0; 
-            break; 
+            case OT_BOOL:
+                SQBool sqValueb;
+                sq_getbool(vm, idx, &sqValueb);
+                value = static_cast<T>(sqValueb);
+                break;
+            case OT_INTEGER:
+                SQInteger sqValue; \
+                sq_getinteger(vm, idx, &sqValue);
+                value = static_cast<T>(sqValue);
+                break;
+            case OT_FLOAT:
+                SQFloat sqValuef;
+                sq_getfloat(vm, idx, &sqValuef);
+                value = static_cast<T>(sqValuef);
+                break;
+            default:
+                Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("float")));
+                value = 0;
+                break;
         }
-    }   
+    }
 };
 
 //
@@ -148,8 +142,8 @@ struct Var {
             T* ptr = ClassType<T>::GetInstance(vm, idx);
             if (ptr != NULL)
                 value = *ptr;
-            else if (is_convertible<T, SQInteger>::YES) 
-            { /* value is likely of integral type like enums */
+            else if (is_convertible<T, SQInteger>::YES) {
+                /* value is likely of integral type like enums */
                 Sqrat::Error::Instance().Clear(vm);
                 value = popAsInt<T, is_convertible<T, SQInteger>::YES>(vm, idx).value;
             }
@@ -158,25 +152,25 @@ struct Var {
             value = popAsInt<T, is_convertible<T, SQInteger>::YES>(vm, idx).value;
     }
     static void push(HSQUIRRELVM vm, const T& value) {
-        if (ClassType<T>::hasClassTypeData(vm)) 
+        if (ClassType<T>::hasClassTypeData(vm))
             ClassType<T>::PushInstanceCopy(vm, value);
-        else /* try integral type */ 
-            pushAsInt<T, is_convertible<T, SQInteger>::YES>().push(vm, (value)); 
-            
+        else /* try integral type */
+            pushAsInt<T, is_convertible<T, SQInteger>::YES>().push(vm, (value));
+
     }
-    
+
 private:
     template <class T2, bool b>
     struct pushAsInt {
         void push(HSQUIRRELVM vm, const T2 & value) {
-            sq_pushnull(vm);            
+            sq_pushnull(vm);
         }
-    }; 
-    
-    template <class T2> 
-    struct pushAsInt<T2, true> {       
+    };
+
+    template <class T2>
+    struct pushAsInt<T2, true> {
         void push(HSQUIRRELVM vm, const T2 & value) {
-            sq_pushinteger(vm, static_cast<SQInteger>(value)); 
+            sq_pushinteger(vm, static_cast<SQInteger>(value));
         }
     };
 };
@@ -223,38 +217,38 @@ struct Var<const T*> {
 
 // Integer Types
 #define SCRAT_INTEGER( type ) \
- template<> \
- struct Var<type> { \
-     type value; \
-     Var(HSQUIRRELVM vm, SQInteger idx) { \
-         value = popAsInt<type, true>(vm, idx).value; \
-     } \
-     static void push(HSQUIRRELVM vm, const type& value) { \
-         sq_pushinteger(vm, static_cast<SQInteger>(value)); \
-     } \
- };\
- \
- template<> \
- struct Var<const type> { \
-     type value; \
-     Var(HSQUIRRELVM vm, SQInteger idx) { \
-         value = popAsInt<type, true>(vm, idx).value; \
-     } \
-     static void push(HSQUIRRELVM vm, const type& value) { \
-         sq_pushinteger(vm, static_cast<SQInteger>(value)); \
-     } \
- }; \
- \
- template<> \
- struct Var<const type&> { \
-     type value; \
-     Var(HSQUIRRELVM vm, SQInteger idx) { \
-         value = popAsInt<type, true>(vm, idx).value; \
-     } \
-     static void push(HSQUIRRELVM vm, const type& value) { \
-         sq_pushinteger(vm, static_cast<SQInteger>(value)); \
-     } \
- };
+    template<> \
+    struct Var<type> { \
+        type value; \
+        Var(HSQUIRRELVM vm, SQInteger idx) { \
+            value = popAsInt<type, true>(vm, idx).value; \
+        } \
+        static void push(HSQUIRRELVM vm, const type& value) { \
+            sq_pushinteger(vm, static_cast<SQInteger>(value)); \
+        } \
+    };\
+    \
+    template<> \
+    struct Var<const type> { \
+        type value; \
+        Var(HSQUIRRELVM vm, SQInteger idx) { \
+            value = popAsInt<type, true>(vm, idx).value; \
+        } \
+        static void push(HSQUIRRELVM vm, const type& value) { \
+            sq_pushinteger(vm, static_cast<SQInteger>(value)); \
+        } \
+    }; \
+    \
+    template<> \
+    struct Var<const type&> { \
+        type value; \
+        Var(HSQUIRRELVM vm, SQInteger idx) { \
+            value = popAsInt<type, true>(vm, idx).value; \
+        } \
+        static void push(HSQUIRRELVM vm, const type& value) { \
+            sq_pushinteger(vm, static_cast<SQInteger>(value)); \
+        } \
+    };
 
 SCRAT_INTEGER(unsigned int)
 SCRAT_INTEGER(signed int)
@@ -276,37 +270,37 @@ SCRAT_INTEGER(signed __int64)
 
 // Float Types
 #define SCRAT_FLOAT( type ) \
- template<> \
- struct Var<type> { \
-     type value; \
-     Var(HSQUIRRELVM vm, SQInteger idx) { \
-         value = popAsFloat<type>(vm, idx).value; \
-     } \
-     static void push(HSQUIRRELVM vm, const type& value) { \
-         sq_pushfloat(vm, static_cast<SQFloat>(value)); \
-     } \
- }; \
- \
- template<> \
- struct Var<const type> { \
-     type value; \
-     Var(HSQUIRRELVM vm, SQInteger idx) { \
-         value = popAsFloat<type>(vm, idx).value; \
-     } \
-     static void push(HSQUIRRELVM vm, const type& value) { \
-         sq_pushfloat(vm, static_cast<SQFloat>(value)); \
-     } \
- }; \
- template<> \
- struct Var<const type&> { \
-     type value; \
-     Var(HSQUIRRELVM vm, SQInteger idx) { \
-         value = popAsFloat<type>(vm, idx).value; \
-     } \
-     static void push(HSQUIRRELVM vm, const type& value) { \
-         sq_pushfloat(vm, static_cast<SQFloat>(value)); \
-     } \
- };
+    template<> \
+    struct Var<type> { \
+        type value; \
+        Var(HSQUIRRELVM vm, SQInteger idx) { \
+            value = popAsFloat<type>(vm, idx).value; \
+        } \
+        static void push(HSQUIRRELVM vm, const type& value) { \
+            sq_pushfloat(vm, static_cast<SQFloat>(value)); \
+        } \
+    }; \
+    \
+    template<> \
+    struct Var<const type> { \
+        type value; \
+        Var(HSQUIRRELVM vm, SQInteger idx) { \
+            value = popAsFloat<type>(vm, idx).value; \
+        } \
+        static void push(HSQUIRRELVM vm, const type& value) { \
+            sq_pushfloat(vm, static_cast<SQFloat>(value)); \
+        } \
+    }; \
+    template<> \
+    struct Var<const type&> { \
+        type value; \
+        Var(HSQUIRRELVM vm, SQInteger idx) { \
+            value = popAsFloat<type>(vm, idx).value; \
+        } \
+        static void push(HSQUIRRELVM vm, const type& value) { \
+            sq_pushfloat(vm, static_cast<SQFloat>(value)); \
+        } \
+    };
 
 SCRAT_FLOAT(float)
 SCRAT_FLOAT(double)
@@ -361,14 +355,13 @@ struct Var<SQChar*> {
         sq_getstackobj(vm, -1, &obj);
         sq_getstring(vm, -1, (const SQChar**)&value);
         sq_addref(vm, &obj);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
         v = vm;
     }
-    ~Var()
-    {
+    ~Var() {
         if(v && !sq_isnull(obj)) {
             sq_release(v, &obj);
-        }        
+        }
     }
     static void push(HSQUIRRELVM vm, const SQChar* value) {
         sq_pushstring(vm, value, -1);
@@ -385,14 +378,13 @@ struct Var<const SQChar*> {
         sq_getstackobj(vm, -1, &obj);
         sq_getstring(vm, -1, &value);
         sq_addref(vm, &obj);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
         v = vm;
     }
-    ~Var()
-    {
+    ~Var() {
         if(v && !sq_isnull(obj)) {
             sq_release(v, &obj);
-        }        
+        }
     }
     static void push(HSQUIRRELVM vm, const SQChar* value) {
         sq_pushstring(vm, value, -1);
@@ -407,7 +399,7 @@ struct Var<string> {
         sq_tostring(vm, idx);
         sq_getstring(vm, -1, &ret);
         value = string(ret);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
     }
     static void push(HSQUIRRELVM vm, const string & value) {
         sq_pushstring(vm, value.c_str(), -1);
@@ -422,7 +414,7 @@ struct Var<string&> {
         sq_tostring(vm, idx);
         sq_getstring(vm, -1, &ret);
         value = string(ret);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
     }
     static void push(HSQUIRRELVM vm, const string & value) {
         sq_pushstring(vm, value.c_str(), -1);
@@ -437,7 +429,7 @@ struct Var<const string&> {
         sq_tostring(vm, idx);
         sq_getstring(vm, -1, &ret);
         value = string(ret);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
     }
     static void push(HSQUIRRELVM vm, const string & value) {
         sq_pushstring(vm, value.c_str(), -1);
@@ -454,7 +446,7 @@ struct Var<std::string> {
         sq_tostring(vm, idx);
         sq_getstring(vm, -1, &ret);
         value = wstring_to_string(string(ret));
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
     }
     static void push(HSQUIRRELVM vm, const std::string & value) {
         sq_pushstring(vm, string_to_wstring(value).c_str(), -1);
@@ -469,7 +461,7 @@ struct Var<std::string&> {
         sq_tostring(vm, idx);
         sq_getstring(vm, -1, &ret);
         value = wstring_to_string(string(ret));
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
     }
     static void push(HSQUIRRELVM vm, const std::string & value) {
         sq_pushstring(vm, string_to_wstring(value).c_str(), -1);
@@ -484,7 +476,7 @@ struct Var<const std::string&> {
         sq_tostring(vm, idx);
         sq_getstring(vm, -1, &ret);
         value = wstring_to_string(string(ret));
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
     }
     static void push(HSQUIRRELVM vm, const std::string & value) {
         sq_pushstring(vm, string_to_wstring(value).c_str(), -1);
@@ -505,17 +497,16 @@ struct Var<char*> {
         sq_getstackobj(vm, -1, &obj);
         sq_getstring(vm, -1, &sv);
         sq_addref(vm, &obj);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
         v = vm;
         holder = wstring_to_string(string(sv));
         value = strdup(holder.c_str());
     }
-    ~Var()
-    {
+    ~Var() {
         if(v && !sq_isnull(obj)) {
             sq_release(v, &obj);
             free(value);
-        }        
+        }
     }
     static void push(HSQUIRRELVM vm, const char* value) {
         sq_pushstring(vm, string_to_wstring(std::string(value)).c_str(), -1);
@@ -534,17 +525,16 @@ struct Var<const char*> {
         sq_getstackobj(vm, -1, &obj);
         sq_getstring(vm, -1, &sv);
         sq_addref(vm, &obj);
-        sq_pop(vm,1);
+        sq_pop(vm, 1);
         v = vm;
         holder = wstring_to_string(string(sv));
         value = strdup(holder.c_str());
     }
-    ~Var()
-    {
+    ~Var() {
         if(v && !sq_isnull(obj)) {
             sq_release(v, &obj);
             free(value);
-        }        
+        }
     }
     static void push(HSQUIRRELVM vm, const char* value) {
         sq_pushstring(vm, string_to_wstring(std::string(value)).c_str(), -1);
@@ -559,20 +549,23 @@ struct Var<const char*> {
 
 // Push
 template<class T>
-inline void PushVar(HSQUIRRELVM vm, T value) {
+inline void PushVar(HSQUIRRELVM vm, T value)
+{
     Var<T>::push(vm, value);
 }
 
-   
-/* special version for enum values */ 
+
+/* special version for enum values */
 template<>
-inline void PushVar<int>(HSQUIRRELVM vm, int value) { 
-    Var<int>::push(vm, value);    
+inline void PushVar<int>(HSQUIRRELVM vm, int value)
+{
+    Var<int>::push(vm, value);
 }
 
 
 template<class T>
-inline void PushVarR(HSQUIRRELVM vm, T & value) {
+inline void PushVarR(HSQUIRRELVM vm, T & value)
+{
     Var<T&>::push(vm, value);
 }
 

@@ -28,7 +28,8 @@
 
 using namespace Sqrat;
 
-TEST_F(SqratTest, ArrayGet) {
+TEST_F(SqratTest, ArrayGet)
+{
 
     static const SQChar *sq_code = _SC("\
         local i; \
@@ -38,10 +39,10 @@ TEST_F(SqratTest, ArrayGet) {
            ");
     int i;
     DefaultVM::Set(vm);
-    
+
     Array array(vm);
     RootTable(vm).Bind(_SC("a"), array);
-        
+
     Script script;
     try {
         script.CompileString(sq_code);
@@ -54,12 +55,11 @@ TEST_F(SqratTest, ArrayGet) {
     } catch(Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
+
     const int length = array.Length();
     EXPECT_EQ(length, 12);
-    
-    for ( i = 0; i < length; i++)
-    {
+
+    for ( i = 0; i < length; i++) {
         int t;
         int j = array.GetElement(i, t);
         EXPECT_EQ(j, 1);
@@ -72,22 +72,20 @@ TEST_F(SqratTest, ArrayGet) {
     int t[length];
     int j = array.GetArray(t, sizeof(t) / sizeof(t[0]));
     EXPECT_EQ(j, 1);
-    for (i = 0; i < length; i++)
-    {
+    for (i = 0; i < length; i++) {
         EXPECT_EQ(t[i], i);
     }
     double d[length];
     j = array.GetArray(d, sizeof(d) / sizeof(d[0]));
     EXPECT_EQ(j, 1);
-    for (i = 0; i < length; i++)
-    {
+    for (i = 0; i < length; i++) {
         EXPECT_EQ(d[i], (double) i);
-    }    
+    }
     double d2[15];
     j = array.GetArray(d2, sizeof(d2) / sizeof(d2[0]));
     EXPECT_NE(j, 1);
     double d3[5];
     j = array.GetArray(d3, sizeof(d3) / sizeof(d3[0]));
     EXPECT_NE(j, 1);
-        
+
 }

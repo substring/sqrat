@@ -32,9 +32,11 @@
 #include <squirrel.h>
 #include "sqratObject.h"
 
-namespace Sqrat {
+namespace Sqrat
+{
 
-class Function  {
+class Function
+{
     friend class TableBase;
     friend class Table;
     friend class ArrayBase;

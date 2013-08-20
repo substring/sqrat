@@ -28,7 +28,8 @@
 
 using namespace Sqrat;
 
-TEST_F(SqratTest, ImportScript) {
+TEST_F(SqratTest, ImportScript)
+{
     DefaultVM::Set(vm);
 
     sqrat_register_importlib(vm);
@@ -54,7 +55,8 @@ TEST_F(SqratTest, ImportScript) {
     }
 }
 
-TEST_F(SqratTest, ImportScriptIntoTable) {
+TEST_F(SqratTest, ImportScriptIntoTable)
+{
     DefaultVM::Set(vm);
 
     sqrat_register_importlib(vm);

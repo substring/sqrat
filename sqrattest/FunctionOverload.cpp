@@ -27,7 +27,8 @@
 
 using namespace Sqrat;
 
-class Speaker {
+class Speaker
+{
 public:
     int Echo() {
         return 0;
@@ -37,10 +38,12 @@ public:
     }
 };
 
-int GlobalEcho() {
+int GlobalEcho()
+{
     return 0;
 }
-int GlobalEcho(int val) {
+int GlobalEcho(int val)
+{
     return val;
 }
 
@@ -49,7 +52,7 @@ class StaticTestClass
 {
 public:
     static int i1, i2;
-    
+
     static void set(int a1) { i1 = a1; }
     static void set(int a1, int a2) { i1 = a1; i2 = a2; }
     static int get_i1() { return i1; }
@@ -59,7 +62,8 @@ public:
 int StaticTestClass::i1 = -1;
 int StaticTestClass::i2 = -1;
 
-TEST_F(SqratTest, OverloadedMemberFunction) {
+TEST_F(SqratTest, OverloadedMemberFunction)
+{
     DefaultVM::Set(vm);
 
     // Member function overloads
@@ -75,7 +79,7 @@ TEST_F(SqratTest, OverloadedMemberFunction) {
                      .StaticOverload<void (*)(int, int)>(_SC("set"), &StaticTestClass::set)
                      .StaticFunc(_SC("get_i1"), &StaticTestClass::get_i1)
                      .StaticFunc(_SC("get_i2"), &StaticTestClass::get_i2)
-                     );
+                    );
 
     // Global Function overloads
     RootTable().Overload<int (*)()>(_SC("GlobalEcho"), &GlobalEcho);
@@ -130,7 +134,8 @@ TEST_F(SqratTest, OverloadedMemberFunction) {
 // Overload test with const functions, based on scenario provided by emeyex
 //
 
-class Entity {
+class Entity
+{
 public:
     unsigned int QueryEnumValue( unsigned int enumKey, unsigned int enumValueDefault ) const {
         return enumKey;
@@ -140,7 +145,8 @@ public:
     }
 };
 
-TEST_F(SqratTest, ConstOverloadTest) {
+TEST_F(SqratTest, ConstOverloadTest)
+{
     DefaultVM::Set(vm);
 
     // Member function overloads
@@ -172,28 +178,26 @@ TEST_F(SqratTest, ConstOverloadTest) {
 
 
 
-class B 
+class B
 {
 private:
     int value;
 public:
     B(): value(-1) {}
-    
-    int set(int v)
-    {
+
+    int set(int v) {
         value = v;
     }
-    int get()
-    {
+    int get() {
         //std::cout << "B's address is " << (long) this << std::endl;
         return value;
     }
-    
+
     static string shared;
     static int sharedInt;
 };
 
-    
+
 static B& getB(B &b)
 {
     return b;
@@ -217,7 +221,8 @@ static B* getBPtr(B *b)
 string B::shared ;
 int B::sharedInt = -1;
 
-TEST_F(SqratTest, FunctionReturningReferencesToClassesWithStaticMembers) {
+TEST_F(SqratTest, FunctionReturningReferencesToClassesWithStaticMembers)
+{
     DefaultVM::Set(vm);
 
     Class<B> _B;
@@ -226,13 +231,13 @@ TEST_F(SqratTest, FunctionReturningReferencesToClassesWithStaticMembers) {
     .Func(_SC("get"), &B::get)
     .StaticVar(_SC("shared"), &B::shared)
     .StaticVar(_SC("sharedInt"), &B::sharedInt);
-    
+
     RootTable().Bind(_SC("B"), _B);
     RootTable().Func(_SC("getB"), &getB);
     RootTable().Func(_SC("getB2"), &getB2);
     RootTable().Func(_SC("getB4"), &getB4);
     RootTable().Func(_SC("getBPtr"), &getBPtr);
-    
+
     Script script;
     try {
         script.CompileString(_SC(" \
@@ -282,17 +287,14 @@ TEST_F(SqratTest, FunctionReturningReferencesToClassesWithStaticMembers) {
 			gTest.EXPECT_INT_EQ(bb.sharedInt, 9999); \
 			gTest.EXPECT_INT_EQ(b1.sharedInt, 9999); \
             "));
-    }
-    catch (Sqrat::Exception ex) {
+    } catch (Sqrat::Exception ex) {
         FAIL() << _SC("Compile Failed: ") << ex.Message();
     }
 
     try {
         script.Run();
-    }
-    catch (Exception ex) {
+    } catch (Exception ex) {
         FAIL() << _SC("Run Failed: ") << ex.Message();
     }
-    
-}
 
+}
