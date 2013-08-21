@@ -55,9 +55,9 @@ private:
     //static std::map<HSQUIRRELVM, SqratVM*> ms_sqratVMs;
 
     HSQUIRRELVM m_vm;
-    Sqrat::RootTable* m_rootTable;
-    Sqrat::Script* m_script;
-    Sqrat::string m_lastErrorMsg;
+    RootTable* m_rootTable;
+    Script* m_script;
+    string m_lastErrorMsg;
 
     static void s_addVM(HSQUIRRELVM vm, SqratVM* sqratvm) {
         //TODO: use mutex to lock ms_sqratVMs
@@ -94,7 +94,7 @@ private:
     static SQInteger runtimeErrorHandler(HSQUIRRELVM v) {
         const SQChar *sErr = 0;
         if(sq_gettop(v) >= 1) {
-            Sqrat::string& errStr = s_getVM(v)->m_lastErrorMsg;
+            string& errStr = s_getVM(v)->m_lastErrorMsg;
             if(SQ_SUCCEEDED(sq_getstring(v, 2, &sErr))) {
                 //scprintf(_SC("RuntimeError: %s\n"), sErr);
                 //errStr = _SC("RuntimeError: ") + sErr;
@@ -125,8 +125,8 @@ public:
     };
 
     SqratVM(int initialStackSize = 1024): m_vm(sq_open(initialStackSize))
-        , m_rootTable(new Sqrat::RootTable(m_vm))
-        , m_script(new Sqrat::Script(m_vm))
+        , m_rootTable(new RootTable(m_vm))
+        , m_script(new Script(m_vm))
         , m_lastErrorMsg() {
         s_addVM(m_vm, this);
         //register std libs
@@ -152,17 +152,17 @@ public:
     HSQUIRRELVM getVM() {
         return m_vm;
     }
-    Sqrat::RootTable& getRootTable() {
+    RootTable& getRootTable() {
         return *m_rootTable;
     }
-    Sqrat::Script& getScript() {
+    Script& getScript() {
         return *m_script;
     }
 
-    Sqrat::string getLastErrorMsg() {
+    string getLastErrorMsg() {
         return m_lastErrorMsg;
     }
-    void setLastErrorMsg(const Sqrat::string& str) {
+    void setLastErrorMsg(const string& str) {
         m_lastErrorMsg = str;
     }
 
@@ -177,8 +177,8 @@ public:
     }
 
 
-    ERROR_STATE doString(const Sqrat::string& str) {
-        Sqrat::string msg;
+    ERROR_STATE doString(const string& str) {
+        string msg;
         m_lastErrorMsg.clear();
         if(!m_script->CompileString(str, msg)) {
             if(m_lastErrorMsg.empty()) {
@@ -195,8 +195,8 @@ public:
         return SQRAT_NO_ERROR;
     }
 
-    ERROR_STATE doFile(const Sqrat::string& file) {
-        Sqrat::string msg;
+    ERROR_STATE doFile(const string& file) {
+        string msg;
         m_lastErrorMsg.clear();
         if(!m_script->CompileFile(file, msg)) {
             if(m_lastErrorMsg.empty()) {

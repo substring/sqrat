@@ -222,8 +222,8 @@ public:
         }
 
         Var<T> element(vm, -1);
-        if (Sqrat::Error::Instance().Occurred(vm)) {
-            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         sq_pop(vm, 2);
         out_element = element.value;
@@ -244,8 +244,8 @@ public:
             sq_getinteger(vm, -2, &i);
             if (i >= size) break;
             Var<T> element(vm, -1);
-            if (Sqrat::Error::Instance().Occurred(vm)) {
-                return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
+            if (Error::Instance().Occurred(vm)) {
+                return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
             }
             sq_pop(vm, 2);
             array[i] = element.value;
@@ -285,7 +285,7 @@ struct Var<Array> {
         value = Array(obj, vm);
         SQObjectType value_type = sq_gettype(vm, idx);
         if (value_type != OT_ARRAY) {
-            Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("array")));
+            Error::Instance().Throw(vm, Error::FormatTypeError(vm, idx, _SC("array")));
         }
     }
     static void push(HSQUIRRELVM vm, Array value) {

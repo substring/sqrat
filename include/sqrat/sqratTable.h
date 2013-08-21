@@ -116,8 +116,8 @@ public:
         }
 
         Var<T> entry(vm, -1);
-        if (Sqrat::Error::Instance().Occurred(vm)) {
-            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         sq_pop(vm, 2);
         out_entry = entry.value;
@@ -135,8 +135,8 @@ public:
         }
 
         Var<T> entry(vm, -1);
-        if (Sqrat::Error::Instance().Occurred(vm)) {
-            return sq_throwerror(vm, Sqrat::Error::Instance().Message(vm).c_str());
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
         sq_pop(vm, 2);
         out_entry = entry.value;
@@ -229,7 +229,7 @@ struct Var<Table> {
         value = Table(obj, vm);
         SQObjectType value_type = sq_gettype(vm, idx);
         if (value_type != OT_TABLE) {
-            Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("table")));
+            Error::Instance().Throw(vm, Error::FormatTypeError(vm, idx, _SC("table")));
         }
     }
     static void push(HSQUIRRELVM vm, Table value) {

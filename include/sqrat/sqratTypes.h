@@ -83,7 +83,7 @@ struct popAsInt {
                 value = static_cast<T>(sqValuef);
                 break;
             default:
-                Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("integer")));
+                Error::Instance().Throw(vm, Error::FormatTypeError(vm, idx, _SC("integer")));
                 value = static_cast<T>(0);
                 break;
         }
@@ -120,7 +120,7 @@ struct popAsFloat {
                 value = static_cast<T>(sqValuef);
                 break;
             default:
-                Error::Instance().Throw(vm, Sqrat::Error::FormatTypeError(vm, idx, _SC("float")));
+                Error::Instance().Throw(vm, Error::FormatTypeError(vm, idx, _SC("float")));
                 value = 0;
                 break;
         }
@@ -137,14 +137,14 @@ struct Var {
     T value;
     Var(HSQUIRRELVM vm, SQInteger idx) {
         // don't want to override previous errors
-        if (!Sqrat::Error::Instance().Occurred(vm)) {
+        if (!Error::Instance().Occurred(vm)) {
             // check if return is NULL here because copying (not referencing)
             T* ptr = ClassType<T>::GetInstance(vm, idx);
             if (ptr != NULL)
                 value = *ptr;
             else if (is_convertible<T, SQInteger>::YES) {
                 /* value is likely of integral type like enums */
-                Sqrat::Error::Instance().Clear(vm);
+                Error::Instance().Clear(vm);
                 value = popAsInt<T, is_convertible<T, SQInteger>::YES>(vm, idx).value;
             }
         } else
