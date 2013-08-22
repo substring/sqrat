@@ -119,6 +119,7 @@ inline string LastErrorString( HSQUIRRELVM vm )
     sq_getstring(vm, -1, &sqErr);
     return string(sqErr);
 }
+
 class Error
 {
 public:
@@ -166,6 +167,19 @@ private:
 
     std::map< HSQUIRRELVM, string > errMap;
 };
+
+//
+// Implement some used C++11 functionality without using C++11
+//
+template<class T> struct is_reference             { static const bool value = false; };
+template<class T> struct is_reference<T&>         { static const bool value = true;  };
+template<class T> struct remove_const             { typedef T type; };
+template<class T> struct remove_const<const T>    { typedef T type; };
+template<class T> struct remove_reference         { typedef T type; };
+template<class T> struct remove_reference<T&>     { typedef T type; };
+template<class T> struct remove_pointer           { typedef T type; };
+template<class T> struct remove_pointer<T*>       { typedef T type; };
+template<class T> struct remove_pointer<T* const> { typedef T type; };
 
 }
 

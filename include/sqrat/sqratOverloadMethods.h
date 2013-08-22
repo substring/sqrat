@@ -28,9 +28,9 @@
 #if !defined(_SQRAT_OVERLOAD_METHODS_H_)
 #define _SQRAT_OVERLOAD_METHODS_H_
 
+#include <typeinfo>
 #include <squirrel.h>
 #include <sqstdaux.h>
-#include <sstream>
 #include "sqratTypes.h"
 #include "sqratUtil.h"
 #include "sqratGlobalMethods.h"
@@ -38,25 +38,378 @@
 
 namespace Sqrat
 {
-
 //
-// Overload name generator
+// Overload parameter name generating functions
 //
-class SqOverloadName
-{
-public:
-    static string Get(const SQChar* name, int args) {
-        std::basic_stringstream<SQChar> overloadName;
-        overloadName << _SC("__sqrat_ol_ ") << name << _SC("_") << args;
 
-        return overloadName.str();
+// Default parameter name template
+template<class T>
+struct SqOverloadParameter {
+    static string Name() {
+        if (is_reference<T>::value) {
+#ifdef SQUNICODE
+            return string_to_wstring(typeid(typename remove_reference<typename remove_const<T>::type>::type).name());
+#else
+            return typeid(typename remove_reference<typename remove_const<T>::type>::type).name();
+#endif
+        } else {
+#ifdef SQUNICODE
+            return string_to_wstring(typeid(typename remove_pointer<typename remove_const<T>::type>::type).name());
+#else
+            return typeid(typename remove_pointer<typename remove_const<T>::type>::type).name();
+#endif
+        }
+    }
+};
+
+// Integer parameter name specializations
+#define SCRAT_OVERLOAD_NAME_INTEGER( type ) \
+    template<> \
+    struct SqOverloadParameter<type> { \
+        static string Name() { \
+            return _SC("i"); \
+        } \
+    }; \
+    \
+    template<> \
+    struct SqOverloadParameter<const type> { \
+        static string Name() { \
+            return _SC("i"); \
+        } \
+    }; \
+    \
+    template<> \
+    struct SqOverloadParameter<const type&> { \
+        static string Name() { \
+            return _SC("i"); \
+        } \
+    };
+
+SCRAT_OVERLOAD_NAME_INTEGER(unsigned int)
+SCRAT_OVERLOAD_NAME_INTEGER(signed int)
+SCRAT_OVERLOAD_NAME_INTEGER(unsigned long)
+SCRAT_OVERLOAD_NAME_INTEGER(signed long)
+SCRAT_OVERLOAD_NAME_INTEGER(unsigned short)
+SCRAT_OVERLOAD_NAME_INTEGER(signed short)
+SCRAT_OVERLOAD_NAME_INTEGER(unsigned char)
+SCRAT_OVERLOAD_NAME_INTEGER(signed char)
+SCRAT_OVERLOAD_NAME_INTEGER(unsigned long long)
+SCRAT_OVERLOAD_NAME_INTEGER(signed long long)
+
+#ifdef _MSC_VER
+#if defined(__int64)
+SCRAT_OVERLOAD_NAME_INTEGER(unsigned __int64)
+SCRAT_OVERLOAD_NAME_INTEGER(signed __int64)
+#endif
+#endif
+
+// Float parameter name specializations
+#define SCRAT_OVERLOAD_NAME_FLOAT( type ) \
+    template<> \
+    struct SqOverloadParameter<type> { \
+        static string Name() { \
+            return _SC("f"); \
+        } \
+    }; \
+    \
+    template<> \
+    struct SqOverloadParameter<const type> { \
+        static string Name() { \
+            return _SC("f"); \
+        } \
+    }; \
+    \
+    template<> \
+    struct SqOverloadParameter<const type&> { \
+        static string Name() { \
+            return _SC("f"); \
+        } \
+    };
+
+SCRAT_OVERLOAD_NAME_FLOAT(float)
+SCRAT_OVERLOAD_NAME_FLOAT(double)
+
+// Boolean parameter name specializations
+template<>
+struct SqOverloadParameter<bool> {
+    static string Name() {
+        return _SC("b");
+    }
+};
+
+template<>
+struct SqOverloadParameter<const bool> {
+    static string Name() {
+        return _SC("b");
+    }
+};
+
+template<>
+struct SqOverloadParameter<const bool&> {
+    static string Name() {
+        return _SC("b");
+    }
+};
+
+// String parameter name specializations
+template<>
+struct SqOverloadParameter<SQChar*> {
+    static string Name() {
+        return _SC("s");
+    }
+};
+
+template<>
+struct SqOverloadParameter<const SQChar*> {
+    static string Name() {
+        return _SC("s");
+    }
+};
+
+template<>
+struct SqOverloadParameter<string> {
+    static string Name() {
+        return _SC("s");
+    }
+};
+
+template<>
+struct SqOverloadParameter<const string&> {
+    static string Name() {
+        return _SC("s");
+    }
+};
+
+#ifdef SQUNICODE
+template<>
+struct SqOverloadParameter<char*> {
+    static string Name() {
+        return _SC("s");
+    }
+};
+
+template<>
+struct SqOverloadParameter<const char*> {
+    static string Name() {
+        return _SC("s");
+    }
+};
+
+template<>
+struct SqOverloadParameter<std::string> {
+    string Name() {
+        return _SC("s");
+    }
+};
+
+template<>
+struct SqOverloadParameter<const std::string&> {
+    string Name() {
+        return _SC("s");
+    }
+};
+#endif
+
+// Array parameter name specialization
+class Array;
+template<>
+struct SqOverloadParameter<Array> {
+    string Name() {
+        return _SC("a");
+    }
+};
+
+// Function parameter name specialization
+class Function;
+template<>
+struct SqOverloadParameter<Function> {
+    string Name() {
+        return _SC("c");
+    }
+};
+
+// Table parameter name specialization
+class Table;
+template<>
+struct SqOverloadParameter<Table> {
+    string Name() {
+        return _SC("t");
     }
 };
 
 //
+// Gets an overload function from Squirrel arguments
+//
+void GetOverload(HSQUIRRELVM vm, const SQChar* funcName, int argCount)
+{
+    sq_pushstring(vm, _SC("__sqrat_ol"), -1);
+    if (SQ_FAILED(sq_get(vm, 1))) {
+        return sq_throwerror(vm, _SC("the index '__sqrat_ol' does not exist"));
+    }
+
+    sq_pushstring(vm, funcName, -1);
+    if (SQ_FAILED(sq_get(vm, -2))) {
+        return sq_throwerror(vm, (string("the index '") + string(funcName) + string("' does not exist")).c_str());
+    }
+
+    sq_pushinteger(vm, argCount);
+    if (SQ_FAILED(sq_get(vm, -2))) {
+        return sq_throwerror(vm, _SC("wrong number of parameters"));
+    }
+
+    bool typeError = false;
+    int i;
+    for (i = 2; i <= argCount + 1; ++i) {
+        if (typeError) break;
+        switch (sq_gettype(vm, i)) {
+            case OT_INSTANCE:
+                ClassTypeDataBase* instanceType;
+                sq_gettypetag(vm, i, (SQUserPointer*)&instanceType);
+                if (instanceType == NULL) {
+                    SQInteger top = sq_gettop(vm);
+                    sq_getclass(vm, i);
+                    while (instanceType == NULL) {
+                        sq_getbase(vm, -1);
+                        if (sq_gettype(vm, -1) == OT_NULL) {
+                            typeError = true;
+                            break;
+                        }
+                        sq_gettypetag(vm, -1, (SQUserPointer*)&instanceType);
+                    }
+                    sq_settop(vm, top);
+                    if (typeError) break;
+                }
+                sq_pushstring(vm, instanceType->typeName, -1);
+                while (SQ_FAILED(sq_get(vm, -2))) {
+                    instanceType = instanceType->baseClass;
+                    if (instanceType == NULL) {
+                        typeError = true;
+                        break;
+                    }
+                    sq_pushstring(vm, instanceType->typeName, -1);
+                }
+                break;
+            case OT_BOOL:
+                sq_pushstring(vm, SqOverloadParameter<bool>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    sq_pushstring(vm, SqOverloadParameter<SQInteger>.Name(), -1);
+                    if (SQ_FAILED(sq_get(vm, -2))) {
+                        sq_pushstring(vm, SqOverloadParameter<SQFloat>.Name(), -1);
+                        if (SQ_FAILED(sq_get(vm, -2))) {
+                            typeError = true;
+                        }
+                    }
+                }
+                break;
+            case OT_INTEGER:
+                sq_pushstring(vm, SqOverloadParameter<SQInteger>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    sq_pushstring(vm, SqOverloadParameter<SQFloat>.Name(), -1);
+                    if (SQ_FAILED(sq_get(vm, -2))) {
+                        sq_pushstring(vm, SqOverloadParameter<bool>.Name(), -1);
+                        if (SQ_FAILED(sq_get(vm, -2))) {
+                            typeError = true;
+                        }
+                    }
+                }
+                break;
+            case OT_FLOAT:
+                sq_pushstring(vm, SqOverloadParameter<SQFloat>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    sq_pushstring(vm, SqOverloadParameter<SQInteger>.Name(), -1);
+                    if (SQ_FAILED(sq_get(vm, -2))) {
+                        sq_pushstring(vm, SqOverloadParameter<bool>.Name(), -1);
+                        if (SQ_FAILED(sq_get(vm, -2))) {
+                            typeError = true;
+                        }
+                    }
+                }
+                break;
+            case OT_STRING:
+                sq_pushstring(vm, SqOverloadParameter<SQChar*>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    typeError = true;
+                }
+                break;
+            case OT_ARRAY:
+                sq_pushstring(vm, SqOverloadParameter<Array>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    typeError = true;
+                }
+                break;
+            case OT_CLOSURE:
+                sq_pushstring(vm, SqOverloadParameter<Function>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    typeError = true;
+                }
+                break;
+            case OT_NATIVECLOSURE:
+                sq_pushstring(vm, SqOverloadParameter<Function>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    typeError = true;
+                }
+                break;
+            case OT_TABLE:
+                sq_pushstring(vm, SqOverloadParameter<Table>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    typeError = true;
+                }
+                break;
+            default:
+                sq_pushstring(vm, SqOverloadParameter<bool>.Name(), -1);
+                if (SQ_FAILED(sq_get(vm, -2))) {
+                    sq_pushstring(vm, SqOverloadParameter<SQChar*>.Name(), -1);
+                    if (SQ_FAILED(sq_get(vm, -2))) {
+                        typeError = true;
+                    }
+                }
+                break;
+        }
+    }
+
+    if (typeError) {
+        string expectedTypes;
+        sq_pushnull(vm);
+        while (SQ_SUCCEEDED(sq_next(vm, -2))) {
+            sq_pop(vm, 1);
+            const SQChar* parameterName;
+            sq_tostring(vm, -1);
+            sq_getstring(vm, -1, &parameterName);
+            if (parameterName == SqOverloadParameter<bool>.Name()) {
+                expectedTypes += _SC("bool|");
+            } else if (parameterName == SqOverloadParameter<SQInteger>.Name()) {
+                expectedTypes += _SC("integer|");
+            } else if (parameterName == SqOverloadParameter<SQFloat>.Name()) {
+                expectedTypes += _SC("float|");
+            } else if (parameterName == SqOverloadParameter<SQChar*>.Name()) {
+                expectedTypes += _SC("string|");
+            } else if (parameterName == SqOverloadParameter<Array>.Name()) {
+                expectedTypes += _SC("array|");
+            } else if (parameterName == SqOverloadParameter<Function>.Name()) {
+                expectedTypes += _SC("closure|");
+            } else if (parameterName == SqOverloadParameter<Table>.Name()) {
+                expectedTypes += _SC("table|");
+            } else {
+                ClassTypeDataBase* expectedInstanceType = ClassTypeMap::GetByTypeName(vm, parameterName);
+                if (expectedInstanceType != NULL) {
+                    expectedTypes += expectedInstanceType->className + _SC("|");
+                } else {
+                    expectedTypes += _SC("unknown|");
+                }
+            }
+            sq_pop(vm, 2);
+        }
+        sq_pop(vm, 1);
+        if (expectedTypes.size() > 0) {
+            expectedTypes.resize(expectedTypes.size() - 1);
+        }
+        Error::Instance().Throw(vm, Error::FormatTypeError(vm, i, expectedTypes));
+    }
+}
+
+//
 // Squirrel Overload Functions
 //
-
 template <class R>
 class SqOverload
 {
@@ -68,15 +421,13 @@ public:
         const SQChar* funcName;
         sq_getstring(vm, -1, &funcName); // get the function name (free variable)
 
-        string overloadName = SqOverloadName::Get(funcName, argCount);
-
-        sq_pushstring(vm, overloadName.c_str(), -1);
-        if(SQ_FAILED(sq_get(vm, 1))) { // Lookup the proper overload
-            return sq_throwerror(vm, _SC("wrong number of parameters"));
+        GetOverload(vm, funcName, argCount);
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
 
         // Push the args again
-        for(int i = 1; i <= argCount + 1; ++i) {
+        for (int i = 1; i <= argCount + 1; ++i) {
             sq_push(vm, i);
         }
 
@@ -92,7 +443,6 @@ public:
 //
 // void return specialization
 //
-
 template <>
 class SqOverload<void>
 {
@@ -104,15 +454,13 @@ public:
         const SQChar* funcName;
         sq_getstring(vm, -1, &funcName); // get the function name (free variable)
 
-        string overloadName = SqOverloadName::Get(funcName, argCount);
-
-        sq_pushstring(vm, overloadName.c_str(), -1);
-        if(SQ_FAILED(sq_get(vm, 1))) { // Lookup the proper overload
-            return sq_throwerror(vm, _SC("wrong number of parameters"));
+        GetOverload(vm, funcName, argCount);
+        if (Error::Instance().Occurred(vm)) {
+            return sq_throwerror(vm, Error::Instance().Message(vm).c_str());
         }
 
         // Push the args again
-        for(int i = 1; i <= argCount + 1; ++i) {
+        for (int i = 1; i <= argCount + 1; ++i) {
             sq_push(vm, i);
         }
 
@@ -124,6 +472,7 @@ public:
         return 0;
     }
 };
+
 //
 // Global Overloaded Function Resolvers
 //
@@ -1290,29 +1639,378 @@ inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
 {
     return 10;
 }
+
 // Arg Count 11
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const)
 {
     return 11;
 }
+
 // Arg Count 12
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const)
 {
     return 12;
 }
+
 // Arg Count 13
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const)
 {
     return 13;
 }
+
 // Arg Count 14
 template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
 inline int SqGetArgCount(R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const)
 {
     return 14;
+}
+
+//
+// Helper function used for binding overload handlers
+//
+
+// TODO
+
+//
+// Bind overload handler for normal functions
+//
+
+// Arg Count 0
+template <class R>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(), SQFUNCTION func)
+{
+    sq_pushinteger(vm, 0);
+    SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(sizeof(method)));
+    memcpy(methodPtr, &method, sizeof(method));
+    sq_newclosure(vm, func, 1);
+    sq_newslot(vm, -3, false);
+}
+
+// Arg Count 1
+template <class R, class A1>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 2
+template <class R, class A1, class A2>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 3
+template <class R, class A1, class A2, class A3>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 4
+template <class R, class A1, class A2, class A3, class A4>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 5
+template <class R, class A1, class A2, class A3, class A4, class A5>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 6
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 7
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6, A7), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 8
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6, A7, A8), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 9
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 10
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 11
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 12
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 13
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 14
+template <class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), SQFUNCTION func)
+{
+    // TODO
+}
+
+//
+// Bind overload handler for member functions
+//
+
+// Arg Count 0
+template <class C, class R>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(), SQFUNCTION func)
+{
+    sq_pushinteger(vm, 0);
+    SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(sizeof(method)));
+    memcpy(methodPtr, &method, sizeof(method));
+    sq_newclosure(vm, func, 1);
+    sq_newslot(vm, -3, false);
+}
+
+// Arg Count 1
+template <class C, class R, class A1>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 2
+template <class C, class R, class A1, class A2>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 3
+template <class C, class R, class A1, class A2, class A3>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 4
+template <class C, class R, class A1, class A2, class A3, class A4>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 5
+template <class C, class R, class A1, class A2, class A3, class A4, class A5>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 6
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 7
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 8
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 9
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 10
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 11
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 12
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 13
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13), SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 14
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14), SQFUNCTION func)
+{
+    // TODO
+}
+
+//
+// Bind overload handler for const member functions
+//
+
+// Arg Count 0
+template <class C, class R>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)() const, SQFUNCTION func)
+{
+    sq_pushinteger(vm, 0);
+    SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(sizeof(method)));
+    memcpy(methodPtr, &method, sizeof(method));
+    sq_newclosure(vm, func, 1);
+    sq_newslot(vm, -3, false);
+}
+
+// Arg Count 1
+template <class C, class R, class A1>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 2
+template <class C, class R, class A1, class A2>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 3
+template <class C, class R, class A1, class A2, class A3>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 4
+template <class C, class R, class A1, class A2, class A3, class A4>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 5
+template <class C, class R, class A1, class A2, class A3, class A4, class A5>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 6
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 7
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 8
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 9
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 10
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 11
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 12
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 13
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13) const, SQFUNCTION func)
+{
+    // TODO
+}
+
+// Arg Count 14
+template <class C, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+inline void SqBindOverloadHandler(HSQUIRRELVM vm, R (C::*method)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14) const, SQFUNCTION func)
+{
+    // TODO
 }
 
 }

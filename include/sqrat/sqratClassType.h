@@ -49,6 +49,7 @@ struct ClassTypeDataBase {
     HSQOBJECT    setTable;
     COPYFUNC    copyFunc;
     string        className;
+    string        typeName;
     ClassTypeDataBase* baseClass;
     bool        ctorCalled;
     virtual ~ClassTypeDataBase() {}
@@ -59,7 +60,6 @@ struct ClassTypeDataBase {
 template<class C, class B>
 struct ClassTypeData : public ClassTypeDataBase {
     virtual SQUserPointer Cast(SQUserPointer ptr, SQUserPointer classType) {
-
         if (classType != this) {
             ptr = baseClass->Cast(static_cast<B*>(static_cast<C*>(ptr)), classType);
         }
@@ -67,14 +67,34 @@ struct ClassTypeData : public ClassTypeDataBase {
     }
 };
 
+class ClassTypeMap
+{
+public:
+    static ClassTypeDataBase* GetByTypeName(HSQUIRRELVM vm, string name) {
+        std::set< ClassTypeDataBase* >& classTypeSet = Instance()[vm];
+        for (std::set< ClassTypeDataBase* >::iterator it = classTypeSet.begin(); it != classTypeSet.end(); ++it) {
+            if (name == (*it)->typeName) {
+                return *it;
+            }
+        }
+        return NULL;
+    }
+
+    static std::map< HSQUIRRELVM, std::set< ClassTypeDataBase* > >& Instance() {
+        static std::map< HSQUIRRELVM, std::set< ClassTypeDataBase* > > instance;
+        return instance;
+    }
+};
+
 template<class C>
 struct ClassType {
-
     static std::map< HSQUIRRELVM, ClassTypeDataBase* > s_classTypeDataMap;
 
     static inline ClassTypeDataBase*& getClassTypeData(HSQUIRRELVM vm) {
         //TODO: use mutex to lock s_classTypeDataMap in multithreaded environment
-        return s_classTypeDataMap[vm];
+        ClassTypeDataBase*& data = s_classTypeDataMap[vm];
+        ClassTypeMap::Instance()[vm].insert(data);
+        return data;
     }
 
     static inline bool hasClassTypeData(HSQUIRRELVM vm) {
@@ -85,7 +105,8 @@ struct ClassType {
     static inline void deleteClassTypeData(HSQUIRRELVM vm) {
         //TODO: use mutex to lock s_classTypeDataMap in multithreaded environment
         std::map< HSQUIRRELVM, ClassTypeDataBase* >::iterator it = s_classTypeDataMap.find(vm);
-        if(it != s_classTypeDataMap.end()) {
+        if (it != s_classTypeDataMap.end()) {
+            ClassTypeMap::Instance()[vm].erase(it->second);
             s_classTypeDataMap.erase(it);
         }
     }
@@ -111,6 +132,10 @@ struct ClassType {
 
     static inline string& ClassName(HSQUIRRELVM vm) {
         return getClassTypeData(vm)->className;
+    }
+
+    static inline string& TypeName(HSQUIRRELVM vm) {
+        return getClassTypeData(vm)->typeName;
     }
 
     static inline ClassTypeDataBase*& BaseClass(HSQUIRRELVM vm) {

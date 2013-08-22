@@ -99,7 +99,7 @@ public:
 
     template<class F>
     TableBase& Overload(const SQChar* name, F method) {
-        BindOverload(name, &method, sizeof(method), SqGlobalOverloadedFunc(method), SqOverloadFunc(method), SqGetArgCount(method));
+        BindOverload(name, method, SqGlobalOverloadedFunc(method), SqOverloadFunc(method));
         return *this;
     }
 

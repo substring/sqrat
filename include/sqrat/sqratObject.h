@@ -245,25 +245,32 @@ protected:
         sq_pop(vm, 1); // pop table
     }
 
-
     // Bind a function and it's associated Squirrel closure to the object
-    inline void BindOverload(const SQChar* name, void* method, size_t methodSize, SQFUNCTION func, SQFUNCTION overload, int argCount, bool staticVar = false) {
-        string overloadName = SqOverloadName::Get(name, argCount);
-
+    template<class F>
+    void BindOverload(const SQChar* name, F method, SQFUNCTION func, SQFUNCTION overload) {
         sq_pushobject(vm, GetObject());
+
+        // Bind overloaded function
+        int argCount = SqGetArgCount(method);
+        sq_pushstring(vm, _SC("__sqrat_ol"), -1);
+        if (SQ_FAILED(sq_get(vm, -2))) {
+            sq_pushstring(vm, _SC("__sqrat_ol"), -1);
+            sq_newtable(vm);
+            sq_newslot(vm, -3, false);
+        }
+        sq_pushstring(vm, name, -1);
+        if (SQ_FAILED(sq_get(vm, -2))) {
+            sq_pushstring(vm, name, -1);
+            sq_newtable(vm);
+            sq_newslot(vm, -3, false);
+        }
+        SqBindOverloadHandler(vm, method, func);
 
         // Bind overload handler
         sq_pushstring(vm, name, -1);
         sq_pushstring(vm, name, -1); // function name is passed as a free variable
         sq_newclosure(vm, overload, 1);
-        sq_newslot(vm, -3, staticVar);
-
-        // Bind overloaded function
-        sq_pushstring(vm, overloadName.c_str(), -1);
-        SQUserPointer methodPtr = sq_newuserdata(vm, static_cast<SQUnsignedInteger>(methodSize));
-        memcpy(methodPtr, method, methodSize);
-        sq_newclosure(vm, func, 1);
-        sq_newslot(vm, -3, staticVar);
+        sq_newslot(vm, -3, false);
 
         sq_pop(vm, 1); // pop table
     }

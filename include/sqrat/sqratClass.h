@@ -273,7 +273,7 @@ public:
 
     template<class F>
     Class& Overload(const SQChar* name, F method) {
-        BindOverload(name, &method, sizeof(method), SqMemberOverloadedFunc(method), SqOverloadFunc(method), SqGetArgCount(method));
+        BindOverload(name, method, SqMemberOverloadedFunc(method), SqOverloadFunc(method));
         return *this;
     }
 
@@ -291,13 +291,13 @@ public:
 
     template<class F>
     Class& GlobalOverload(const SQChar* name, F method) {
-        BindOverload(name, &method, sizeof(method), SqMemberGlobalOverloadedFunc(method), SqOverloadFunc(method), SqGetArgCount(method));
+        BindOverload(name, method, SqMemberGlobalOverloadedFunc(method), SqOverloadFunc(method));
         return *this;
     }
 
     template<class F>
     Class& StaticOverload(const SQChar* name, F method) {
-        BindOverload(name, &method, sizeof(method), SqGlobalOverloadedFunc(method), SqOverloadFunc(method), SqGetArgCount(method));
+        BindOverload(name, method, SqGlobalOverloadedFunc(method), SqOverloadFunc(method));
         return *this;
     }
 
@@ -343,6 +343,11 @@ protected:
     void InitClass(const string& className) {
         ClassType<C>::CopyFunc(vm) = &A::Copy;
         ClassType<C>::ClassName(vm) = className;
+#ifdef SQUNICODE
+        ClassType<C>::TypeName(vm) = string_to_wstring(typeid(C).name());
+#else
+        ClassType<C>::TypeName(vm) = typeid(C).name();
+#endif
         ClassType<C>::BaseClass(vm) = NULL;
 
         // push the class
@@ -573,6 +578,11 @@ protected:
     void InitDerivedClass(HSQUIRRELVM vm, const string& className) {
         ClassType<C>::CopyFunc(vm) = &A::Copy;
         ClassType<C>::ClassName(vm) = className;
+#ifdef SQUNICODE
+        ClassType<C>::TypeName(vm) = string_to_wstring(typeid(C).name());
+#else
+        ClassType<C>::TypeName(vm) = typeid(C).name();
+#endif
         ClassType<C>::BaseClass(vm) = ClassType<B>::getClassTypeData(vm);
 
         // push the class
