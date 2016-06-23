@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include "sqratObject.h"
+#include "sqratBytecode.h"
 
 namespace Sqrat {
 
@@ -235,6 +236,57 @@ public:
         sqstd_writeclosuretofile(vm, path.c_str());
 #endif
         sq_pop(vm, 1); // needed?
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Returns script's bytecode
+    ///
+    /// \remarks
+    /// Caller owns returned \a Bytecode object
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Bytecode * GetBytecode() {
+        Bytecode * bytecode = new Bytecode;
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (!sq_isnull(obj)) {
+            sq_pushobject(vm, obj);
+            sq_writeclosure(vm, BytecodeWriter, bytecode);
+        }
+#else
+        sq_pushobject(vm, obj);
+        sq_writeclosure(vm, BytecodeWriter, bytecode);
+#endif
+        sq_pop(vm, 1); // needed?
+        return bytecode;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Loads script's bytecode
+    ///
+    /// \param bytecode Pointer to \a Bytecode object to load from
+    ///
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    bool SetBytecode(Bytecode * bytecode) {
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (!bytecode || bytecode->Size() == 0) {
+            return false;
+        }
+#endif
+        if(!sq_isnull(obj)) {
+            sq_release(vm, &obj);
+            sq_resetobject(&obj);
+        }
+#if !defined (SCRAT_NO_ERROR_CHECKING)
+        if (SQ_FAILED(sq_readclosure(vm, BytecodeReader, bytecode))) {
+            return false;
+        }
+#else
+        sq_readclosure(vm, BytecodeReader, bytecode);
+#endif
+        sq_getstackobj(vm,-1,&obj);
+        sq_addref(vm, &obj);
+        sq_pop(vm, 1);
+        return true;
     }
 };
 
