@@ -239,36 +239,33 @@ public:
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Returns script's bytecode
-    ///
-    /// \remarks
-    /// Caller owns returned \a Bytecode object
+    /// Saves script's bytecode to string
     ///
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Bytecode * GetBytecode() {
-        Bytecode * bytecode = new Bytecode;
+    std::string SaveBytecode() {
+        Bytecode bytecode;
 #if !defined (SCRAT_NO_ERROR_CHECKING)
         if (!sq_isnull(obj)) {
             sq_pushobject(vm, obj);
-            sq_writeclosure(vm, BytecodeWriter, bytecode);
+            sq_writeclosure(vm, BytecodeWriter, &bytecode);
         }
 #else
         sq_pushobject(vm, obj);
-        sq_writeclosure(vm, BytecodeWriter, bytecode);
+        sq_writeclosure(vm, BytecodeWriter, &bytecode);
 #endif
         sq_pop(vm, 1); // needed?
-        return bytecode;
+        return std::string(reinterpret_cast<char*>(bytecode.Data()), bytecode.Size());
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Loads script's bytecode
+    /// Loads script's bytecode from string
     ///
     /// \param bytecode Pointer to \a Bytecode object to load from
     ///
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    bool SetBytecode(Bytecode * bytecode) {
+    bool LoadBytecode(const std::string & str) {
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        if (!bytecode || bytecode->Size() == 0) {
+        if (str.empty()) {
             return false;
         }
 #endif
@@ -276,12 +273,14 @@ public:
             sq_release(vm, &obj);
             sq_resetobject(&obj);
         }
+        Bytecode bytecode;
+        bytecode.AppendData(str.c_str(), str.size());
 #if !defined (SCRAT_NO_ERROR_CHECKING)
-        if (SQ_FAILED(sq_readclosure(vm, BytecodeReader, bytecode))) {
+        if (SQ_FAILED(sq_readclosure(vm, BytecodeReader, &bytecode))) {
             return false;
         }
 #else
-        sq_readclosure(vm, BytecodeReader, bytecode);
+        sq_readclosure(vm, BytecodeReader, &bytecode);
 #endif
         sq_getstackobj(vm,-1,&obj);
         sq_addref(vm, &obj);

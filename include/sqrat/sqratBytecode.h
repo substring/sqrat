@@ -30,7 +30,6 @@
 
 #include <squirrel.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
 namespace Sqrat {
@@ -63,56 +62,6 @@ public:
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Saves bytecode to file
-    ///
-    /// \param filename File name to save bytecode to
-    /// \returns SQ_OK on success, SQ_ERROR on failure
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    SQRESULT SaveToFile(const char * filename) const {
-        if (!m_data || m_size <= 0)
-            return SQ_ERROR;
-        FILE * ofile = fopen(filename, "wb");
-        if (ofile) {
-            size_t bytes_written = fwrite(m_data, 1, m_size, ofile);
-            fclose(ofile);
-            if (bytes_written == m_size) return SQ_OK;
-            else return SQ_ERROR;
-        }
-        return SQ_ERROR;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Loads bytecode from file
-    ///
-    /// \param filename File name to load bytecode from
-    /// \returns SQ_OK on success, SQ_ERROR on failure
-    ///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    SQRESULT LoadFromFile(const char * filename) {
-        if (m_data) {
-            free(m_data);
-        }
-        FILE * ifile = fopen(filename, "rb");
-        if (ifile) {
-            fseek(ifile, 0, SEEK_END);
-            long fsize = ftell(ifile);
-            if (fsize == 0) {
-                fclose(ifile);
-                return SQ_ERROR;
-            }
-            fseek(ifile, 0, SEEK_SET);
-            m_size = static_cast<size_t>(fsize);
-            m_data = static_cast<char *>(malloc(m_size));
-            size_t bytes_read = fread(m_data, 1, m_size, ifile);
-            fclose(ifile);
-            if (bytes_read == m_size) return SQ_OK;
-            else return SQ_ERROR;
-        }
-        return SQ_ERROR;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Return pointer to bytecode
     ///
     /// \returns Pointer to bytecode data
@@ -130,7 +79,7 @@ public:
     /// \returns SQ_OK on success, SQ_ERROR on failure
     ///
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    SQRESULT SetData(void * data, size_t size) {
+    SQRESULT SetData(const void * data, size_t size) {
         if (m_data) {
             free(m_data);
         }
@@ -149,7 +98,7 @@ public:
     /// \returns Number of bytes appended
     ///
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    SQInteger AppendData(void * data, size_t size) {
+    SQInteger AppendData(const void * data, size_t size) {
         if (!m_data) {
             m_data = static_cast<char *>(malloc(size));
         }
