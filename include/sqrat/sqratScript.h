@@ -247,7 +247,9 @@ public:
 #if !defined (SCRAT_NO_ERROR_CHECKING)
         if (!sq_isnull(obj)) {
             sq_pushobject(vm, obj);
-            sq_writeclosure(vm, BytecodeWriter, &bytecode);
+            if (SQ_FAILED(sq_writeclosure(vm, BytecodeWriter, &bytecode))) {
+                SQTHROW(vm, LastErrorString(vm));
+            }
         }
 #else
         sq_pushobject(vm, obj);
@@ -260,10 +262,10 @@ public:
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Loads script's bytecode from string
     ///
-    /// \param bytecode Pointer to \a Bytecode object to load from
+    /// \param str String containing script's bytecode
     ///
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    bool LoadBytecode(const std::string & str) {
+    bool LoadBytecode(const std::string& str) {
 #if !defined (SCRAT_NO_ERROR_CHECKING)
         if (str.empty()) {
             return false;
@@ -274,7 +276,7 @@ public:
             sq_resetobject(&obj);
         }
         Bytecode bytecode;
-        bytecode.AppendData(str.c_str(), str.size());
+        bytecode.SetData(str.c_str(), str.size());
 #if !defined (SCRAT_NO_ERROR_CHECKING)
         if (SQ_FAILED(sq_readclosure(vm, BytecodeReader, &bytecode))) {
             return false;

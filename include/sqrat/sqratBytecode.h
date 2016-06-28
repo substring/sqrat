@@ -62,7 +62,7 @@ public:
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Return pointer to bytecode
+    /// Returns pointer to bytecode
     ///
     /// \returns Pointer to bytecode data
     ///
@@ -91,7 +91,7 @@ public:
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Appends bytecode
+    /// Appends bytecode from provided buffer
     ///
     /// \param data Pointer to buffer containing bytecode to append
     /// \param size Size of buffer containing bytecode to append
