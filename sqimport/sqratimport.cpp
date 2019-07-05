@@ -103,6 +103,7 @@ static HSQAPI sqrat_newapi() {
     sq->tobool = sq_tobool;
     sq->getstring = sq_getstring;
     sq->getinteger = sq_getinteger;
+    sq->getfloat = sq_getfloat;
     sq->getthread = sq_getthread;
     sq->getbool = sq_getbool;
     sq->getuserpointer = sq_getuserpointer;
