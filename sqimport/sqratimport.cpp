@@ -58,11 +58,19 @@ static HSQAPI sqrat_newapi() {
     sq->close = sq_close;
     sq->setforeignptr = sq_setforeignptr;
     sq->getforeignptr = sq_getforeignptr;
+    sq->setsharedforeignptr = sq_setsharedforeignptr;
+    sq->getsharedforeignptr = sq_getsharedforeignptr;
+    sq->setvmreleasehook = sq_setvmreleasehook;
+    sq->getvmreleasehook = sq_getvmreleasehook;
+    sq->setsharedreleasehook = sq_setsharedreleasehook;
+    sq->getsharedreleasehook = sq_getsharedreleasehook;
     sq->setprintfunc = sq_setprintfunc;
     sq->getprintfunc = sq_getprintfunc;
+    sq->geterrorfunc = sq_geterrorfunc;
     sq->suspendvm = sq_suspendvm;
     sq->wakeupvm = sq_wakeupvm;
     sq->getvmstate = sq_getvmstate;
+    sq->getversion = sq_getversion;
 
     /*compiler*/
     sq->compile = sq_compile;
@@ -85,18 +93,24 @@ static HSQAPI sqrat_newapi() {
     /*object creation handling*/
     sq->newuserdata = sq_newuserdata;
     sq->newtable = sq_newtable;
+    sq->newtableex = sq_newtableex;
     sq->newarray = sq_newarray;
     sq->newclosure = sq_newclosure;
     sq->setparamscheck = sq_setparamscheck;
     sq->bindenv = sq_bindenv;
+    sq->setclosureroot = sq_setclosureroot;
+    sq->getclosureroot = sq_getclosureroot;
     sq->pushstring = sq_pushstring;
     sq->pushfloat = sq_pushfloat;
     sq->pushinteger = sq_pushinteger;
     sq->pushbool = sq_pushbool;
     sq->pushuserpointer = sq_pushuserpointer;
     sq->pushnull = sq_pushnull;
+    sq->pushthread = sq_pushthread;
     sq->gettype = sq_gettype;
+    sq->typeof = sq_typeof;
     sq->getsize = sq_getsize;
+    sq->gethash = sq_gethash;
     sq->getbase = sq_getbase;
     sq->instanceof = sq_instanceof;
     sq->tostring = sq_tostring;
@@ -104,15 +118,18 @@ static HSQAPI sqrat_newapi() {
     sq->getstring = sq_getstring;
     sq->getinteger = sq_getinteger;
     sq->getfloat = sq_getfloat;
-    sq->getthread = sq_getthread;
     sq->getbool = sq_getbool;
+    sq->getthread = sq_getthread;
     sq->getuserpointer = sq_getuserpointer;
     sq->getuserdata = sq_getuserdata;
     sq->settypetag = sq_settypetag;
     sq->gettypetag = sq_gettypetag;
     sq->setreleasehook = sq_setreleasehook;
+    sq->getreleasehook = sq_getreleasehook;
     sq->getscratchpad = sq_getscratchpad;
+    sq->getfunctioninfo = sq_getfunctioninfo;
     sq->getclosureinfo = sq_getclosureinfo;
+    sq->getclosurename = sq_getclosurename;
     sq->setnativeclosurename = sq_setnativeclosurename;
     sq->setinstanceup = sq_setinstanceup;
     sq->getinstanceup = sq_getinstanceup;
@@ -124,6 +141,9 @@ static HSQAPI sqrat_newapi() {
     sq->getclass = sq_getclass;
     sq->weakref = sq_weakref;
     sq->getdefaultdelegate = sq_getdefaultdelegate;
+    sq->getmemberhandle = sq_getmemberhandle;
+    sq->getbyhandle = sq_getbyhandle;
+    sq->setbyhandle = sq_setbyhandle;
 
     /*object manipulation*/
     sq->pushroottable = sq_pushroottable;
@@ -138,6 +158,8 @@ static HSQAPI sqrat_newapi() {
     sq->rawset = sq_rawset;
     sq->rawget = sq_rawget;
     sq->rawdeleteslot = sq_rawdeleteslot;
+    sq->newmember = sq_newmember;
+    sq->rawnewmember = sq_rawnewmember;
     sq->arrayappend = sq_arrayappend;
     sq->arraypop = sq_arraypop;
     sq->arrayresize = sq_arrayresize;
@@ -156,8 +178,10 @@ static HSQAPI sqrat_newapi() {
     sq->call = sq_call;
     sq->resume = sq_resume;
     sq->getlocal = sq_getlocal;
+    sq->getcallee = sq_getcallee;
     sq->getfreevariable = sq_getfreevariable;
     sq->throwerror = sq_throwerror;
+    sq->throwobject = sq_throwobject;
     sq->reseterror = sq_reseterror;
     sq->getlasterror = sq_getlasterror;
 
@@ -166,15 +190,19 @@ static HSQAPI sqrat_newapi() {
     sq->pushobject = sq_pushobject;
     sq->addref = sq_addref;
     sq->release = sq_release;
+    sq->getrefcount = sq_getrefcount;
     sq->resetobject = sq_resetobject;
     sq->objtostring = sq_objtostring;
     sq->objtobool = sq_objtobool;
     sq->objtointeger = sq_objtointeger;
     sq->objtofloat = sq_objtofloat;
+    sq->objtouserpointer = sq_objtouserpointer;
     sq->getobjtypetag = sq_getobjtypetag;
+    sq->getvmrefcount = sq_getvmrefcount;
 
     /*GC*/
     sq->collectgarbage = sq_collectgarbage;
+    sq->resurrectunreachable = sq_resurrectunreachable;
 
     /*serialization*/
     sq->writeclosure = sq_writeclosure;
@@ -188,6 +216,7 @@ static HSQAPI sqrat_newapi() {
     /*debug*/
     sq->stackinfos = sq_stackinfos;
     sq->setdebughook = sq_setdebughook;
+    sq->setnativedebughook = sq_setnativedebughook;
 
     return sq;
 }
