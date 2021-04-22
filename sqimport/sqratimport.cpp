@@ -108,7 +108,7 @@ static HSQAPI sqrat_newapi() {
     sq->pushnull = sq_pushnull;
     sq->pushthread = sq_pushthread;
     sq->gettype = sq_gettype;
-    sq->typeof = sq_typeof;
+    sq->type_of = sq_typeof;
     sq->getsize = sq_getsize;
     sq->gethash = sq_gethash;
     sq->getbase = sq_getbase;

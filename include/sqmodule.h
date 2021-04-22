@@ -105,7 +105,7 @@ extern "C" {
         void            (*pushnull)(HSQUIRRELVM v);
         void            (*pushthread)(HSQUIRRELVM v, HSQUIRRELVM thread);
         SQObjectType    (*gettype)(HSQUIRRELVM v,SQInteger idx);
-        SQRESULT        (*typeof)(HSQUIRRELVM v,SQInteger idx);
+        SQRESULT        (*type_of)(HSQUIRRELVM v,SQInteger idx);
         SQInteger       (*getsize)(HSQUIRRELVM v,SQInteger idx);
         SQHash          (*gethash)(HSQUIRRELVM v, SQInteger idx);
         SQRESULT        (*getbase)(HSQUIRRELVM v,SQInteger idx);
