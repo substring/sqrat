@@ -51,7 +51,7 @@ namespace Sqrat {
 #if !defined (SCRAT_NO_ERROR_CHECKING)
             SQObjectType value_type = sq_gettype(vm, idx);
             if (value_type != OT_NULL) {
-                SQTHROW(vm, FormatTypeError(vm, idx, _SC("closure")));
+                SQTHROW(vm, FormatTypeError(vm, idx, _SC("null")));
             }
 #endif
             value = nullptr;
