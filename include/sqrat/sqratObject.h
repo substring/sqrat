@@ -107,6 +107,7 @@ public:
         ClassType<T>::PushInstance(vm, instance);
         sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
+        sq_pop(vm, 1);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
