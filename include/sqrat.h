@@ -66,6 +66,5 @@
 #include "sqrat/sqratScript.h"
 #include "sqrat/sqratArray.h"
 #include "sqrat/sqratNull.h"
-#include "sqrat/sqratUserPointer.h"
 
 #endif
