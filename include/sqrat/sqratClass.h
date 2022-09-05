@@ -296,7 +296,7 @@ public:
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Binds a Squirrel function as defined by the Squirrel documentation as a read-only class property
+    /// Binds a Squirrel function as defined by the Squirrel documentation as a class property
     ///
     /// \param name   Name of the variable as it will appear in Squirrel
     /// \param getter Getter for the variable
